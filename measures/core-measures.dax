@@ -1,0 +1,143 @@
+-- Core workload, timeliness, target, and priority measures.
+-- These measures assume the planned model tables documented in docs/model-design.md:
+-- 'fact_operational_item', 'fact_target', and 'dim_date'.
+-- They are catalogue measures and still need validation in Power BI Desktop.
+
+Total Items =
+DISTINCTCOUNT ( 'fact_operational_item'[item_id] )
+
+Open Items =
+CALCULATE (
+    [Total Items],
+    'fact_operational_item'[status] IN { "Open", "In Progress" }
+)
+
+Paused Items =
+CALCULATE (
+    [Total Items],
+    'fact_operational_item'[status] = "Paused"
+)
+
+Closed Items =
+CALCULATE (
+    [Total Items],
+    'fact_operational_item'[status] = "Closed"
+)
+
+Cancelled Items =
+CALCULATE (
+    [Total Items],
+    'fact_operational_item'[status] = "Cancelled"
+)
+
+Backlog Items =
+CALCULATE (
+    [Total Items],
+    'fact_operational_item'[status] IN { "Open", "In Progress", "Paused" }
+)
+
+Report Date =
+COALESCE (
+    MAX ( 'dim_date'[date] ),
+    TODAY ()
+)
+
+Overdue Active Items =
+VAR CurrentReportDate = [Report Date]
+RETURN
+CALCULATE (
+    [Total Items],
+    'fact_operational_item'[status] IN { "Open", "In Progress" },
+    NOT ISBLANK ( 'fact_operational_item'[due_date] ),
+    'fact_operational_item'[due_date] < CurrentReportDate
+)
+
+Due Soon Items =
+VAR CurrentReportDate = [Report Date]
+VAR DueSoonEndDate = CurrentReportDate + 7
+RETURN
+CALCULATE (
+    [Total Items],
+    'fact_operational_item'[status] IN { "Open", "In Progress" },
+    NOT ISBLANK ( 'fact_operational_item'[due_date] ),
+    'fact_operational_item'[due_date] >= CurrentReportDate,
+    'fact_operational_item'[due_date] <= DueSoonEndDate
+)
+
+Average Cycle Time Days =
+AVERAGEX (
+    FILTER (
+        'fact_operational_item',
+        'fact_operational_item'[status] = "Closed"
+            && NOT ISBLANK ( 'fact_operational_item'[opened_date] )
+            && NOT ISBLANK ( 'fact_operational_item'[closed_date] )
+    ),
+    DATEDIFF (
+        'fact_operational_item'[opened_date],
+        'fact_operational_item'[closed_date],
+        DAY
+    )
+)
+
+Closed Items With Valid SLA Inputs =
+COUNTROWS (
+    FILTER (
+        'fact_operational_item',
+        'fact_operational_item'[status] = "Closed"
+            && NOT ISBLANK ( 'fact_operational_item'[target_key] )
+            && NOT ISBLANK ( 'fact_operational_item'[due_date] )
+            && NOT ISBLANK ( 'fact_operational_item'[closed_date] )
+            && CONTAINS (
+                VALUES ( 'fact_target'[target_key] ),
+                'fact_target'[target_key],
+                'fact_operational_item'[target_key]
+            )
+    )
+)
+
+SLA Met Items =
+COUNTROWS (
+    FILTER (
+        'fact_operational_item',
+        'fact_operational_item'[status] = "Closed"
+            && NOT ISBLANK ( 'fact_operational_item'[target_key] )
+            && NOT ISBLANK ( 'fact_operational_item'[due_date] )
+            && NOT ISBLANK ( 'fact_operational_item'[closed_date] )
+            && CONTAINS (
+                VALUES ( 'fact_target'[target_key] ),
+                'fact_target'[target_key],
+                'fact_operational_item'[target_key]
+            )
+            && 'fact_operational_item'[closed_date] <= 'fact_operational_item'[due_date]
+    )
+)
+
+SLA Met Rate =
+DIVIDE (
+    [SLA Met Items],
+    [Closed Items With Valid SLA Inputs]
+)
+
+High Priority Active Items =
+CALCULATE (
+    [Total Items],
+    'fact_operational_item'[status] IN { "Open", "In Progress" },
+    'fact_operational_item'[priority] IN { "High", "Critical" }
+)
+
+High Priority Overdue Items =
+VAR CurrentReportDate = [Report Date]
+RETURN
+CALCULATE (
+    [Total Items],
+    'fact_operational_item'[status] IN { "Open", "In Progress" },
+    'fact_operational_item'[priority] IN { "High", "Critical" },
+    NOT ISBLANK ( 'fact_operational_item'[due_date] ),
+    'fact_operational_item'[due_date] < CurrentReportDate
+)
+
+Review Flag Count =
+CALCULATE (
+    [Total Items],
+    'fact_operational_item'[review_flag] = "Yes"
+)

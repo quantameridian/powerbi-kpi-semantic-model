@@ -1,0 +1,61 @@
+-- Trend and period-comparison measures.
+-- These assume 'dim_date'[date] is the active reporting date context.
+-- If the final model uses a different active date path, these measures
+-- should be reviewed before use.
+
+Open Items Previous Month =
+CALCULATE (
+    [Open Items],
+    DATEADD ( 'dim_date'[date], -1, MONTH )
+)
+
+MoM Open Item Change =
+[Open Items] - [Open Items Previous Month]
+
+MoM Open Item Change % =
+DIVIDE (
+    [MoM Open Item Change],
+    [Open Items Previous Month]
+)
+
+Closed Items Previous Month =
+CALCULATE (
+    [Closed Items],
+    DATEADD ( 'dim_date'[date], -1, MONTH )
+)
+
+MoM Closed Item Change =
+[Closed Items] - [Closed Items Previous Month]
+
+MoM Closed Item Change % =
+DIVIDE (
+    [MoM Closed Item Change],
+    [Closed Items Previous Month]
+)
+
+Overdue Active Items Previous Month =
+CALCULATE (
+    [Overdue Active Items],
+    DATEADD ( 'dim_date'[date], -1, MONTH )
+)
+
+MoM Overdue Active Item Change =
+[Overdue Active Items] - [Overdue Active Items Previous Month]
+
+SLA Met Rate Previous Month =
+CALCULATE (
+    [SLA Met Rate],
+    DATEADD ( 'dim_date'[date], -1, MONTH )
+)
+
+MoM SLA Met Rate Change =
+[SLA Met Rate] - [SLA Met Rate Previous Month]
+
+Average Cycle Time Previous Month =
+CALCULATE (
+    [Average Cycle Time Days],
+    DATEADD ( 'dim_date'[date], -1, MONTH )
+)
+
+MoM Average Cycle Time Change =
+[Average Cycle Time Days] - [Average Cycle Time Previous Month]

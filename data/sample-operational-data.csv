@@ -1,0 +1,33 @@
+item_id,item_reference,opened_date,due_date,closed_date,reporting_period,service_area_id,owner_id,category_id,status,priority,target_key,evidence_status,closure_evidence_link,review_flag,notes
+ITEM-0001,OPS-2026-001,2026-01-05,2026-01-08,2026-01-07,2026-01,SA01,OWN01,CAT01,Closed,High,CAT01|High,Present,evidence/item-0001,No,Resolved within target
+ITEM-0002,OPS-2026-002,2026-01-06,2026-01-13,2026-01-14,2026-01,SA02,OWN04,CAT03,Closed,Medium,CAT03|Medium,Present,evidence/item-0002,No,Closed one day after target
+ITEM-0003,OPS-2026-003,2026-01-09,2026-01-16,,2026-01,SA01,OWN02,CAT02,Open,Medium,CAT02|Medium,Not required,,No,Open within review window
+ITEM-0004,OPS-2026-004,2026-01-12,2026-01-15,2026-01-15,2026-01,SA03,OWN05,CAT04,Closed,Low,CAT04|Low,Missing,,Yes,Closed without evidence
+ITEM-0005,OPS-2026-005,2026-01-18,2026-01-21,,2026-01,SA02,,CAT01,In Progress,High,CAT01|High,Pending,,Yes,Missing owner role
+ITEM-0006,OPS-2026-006,2026-02-02,2026-02-04,2026-02-04,2026-02,SA04,OWN07,CAT05,Closed,Critical,CAT05|Critical,Present,evidence/item-0006,No,Critical item closed on target
+ITEM-0007,OPS-2026-007,2026-02-04,2026-02-11,,2026-02,SA01,OWN01,CAT02,Open,Low,CAT02|Low,Not required,,No,Low priority open item
+ITEM-0008,OPS-2026-008,2026-02-08,2026-02-15,2026-02-17,2026-02,SA03,OWN06,CAT03,Closed,Medium,CAT03|Medium,Present,evidence/item-0008,No,Closed after target
+ITEM-0009,OPS-2026-009,2026-02-11,2026-02-14,,2026-02,SA02,OWN03,CAT01,Paused,High,CAT01|High,Pending,,Yes,Paused after dependency raised
+ITEM-0010,OPS-2026-010,2026-02-17,,2026-02-25,2026-02,SA04,OWN08,CAT06,Closed,Medium,CAT06|Medium,Present,evidence/item-0010,Yes,Missing due date for closed item
+ITEM-0011,OPS-2026-011,2026-03-01,2026-03-05,2026-03-05,2026-03,SA01,OWN02,CAT01,Closed,High,CAT01|High,Present,evidence/item-0011,No,Resolved on due date
+ITEM-0012,OPS-2026-012,2026-03-03,2026-03-10,,2026-03,SA03,OWN05,CAT04,In Progress,Low,CAT04|Low,Not required,,No,Low risk work in progress
+ITEM-0013,OPS-2026-013,2026-03-06,2026-03-09,,2026-03,SA02,OWN04,CAT03,Open,Critical,CAT03|Critical,Pending,,Yes,Critical open item past target
+ITEM-0014,OPS-2026-014,2026-03-09,2026-03-16,2026-03-14,2026-03,SA04,OWN07,CAT05,Closed,Medium,CAT05|Medium,Present,evidence/item-0014,No,Closed ahead of target
+ITEM-0015,OPS-2026-015,2026-03-14,2026-03-21,,2026-03,SA01,,CAT02,Open,Medium,CAT02|Medium,Pending,,Yes,Missing owner role
+ITEM-0016,OPS-2026-016,2026-04-01,2026-04-05,2026-04-04,2026-04,SA03,OWN06,CAT04,Closed,High,CAT04|High,Present,evidence/item-0016,No,High priority closed within target
+ITEM-0017,OPS-2026-017,2026-04-03,2026-04-10,,2026-04,SA02,OWN03,CAT01,In Progress,High,CAT01|High,Pending,,Yes,High priority unresolved
+ITEM-0018,OPS-2026-018,2026-04-08,2026-04-11,2026-04-18,2026-04,SA04,OWN08,CAT06,Closed,Medium,CAT06|Medium,Missing,,Yes,Closed late and missing evidence
+ITEM-0019,OPS-2026-019,2026-04-10,2026-04-17,,2026-04,SA01,OWN02,CAT02,Paused,Low,CAT02|Low,Not required,,No,Paused within normal review route
+ITEM-0020,OPS-2026-020,2026-04-16,2026-04-19,2026-04-19,2026-04,SA02,OWN04,CAT03,Closed,Critical,CAT03|Critical,Present,evidence/item-0020,No,Critical closed on target
+ITEM-0021,OPS-2026-021,2026-05-02,2026-05-06,,2026-05,SA03,OWN05,CAT04,Open,High,CAT04|High,Pending,,Yes,High priority open past target
+ITEM-0022,OPS-2026-022,2026-05-04,2026-05-11,2026-05-09,2026-05,SA01,OWN01,CAT01,Closed,Medium,CAT01|Medium,Present,evidence/item-0022,No,Closed ahead of target
+ITEM-0023,OPS-2026-023,2026-05-07,2026-05-14,,2026-05,SA04,,CAT05,In Progress,Medium,CAT05|Medium,Pending,,Yes,Missing owner role
+ITEM-0024,OPS-2026-024,2026-05-11,2026-05-18,2026-05-23,2026-05,SA02,OWN03,CAT03,Closed,High,CAT03|High,Present,evidence/item-0024,No,Closed after target
+ITEM-0025,OPS-2026-025,2026-05-16,2026-05-20,,2026-05,SA03,OWN06,CAT04,Cancelled,Low,CAT04|Low,Not required,,No,Cancelled before completion
+ITEM-0026,OPS-2026-026,2026-06-01,2026-06-05,,2026-06,SA01,OWN02,CAT02,Open,Critical,CAT02|Critical,Pending,,Yes,Critical open item
+ITEM-0027,OPS-2026-027,2026-06-03,2026-06-10,,2026-06,SA02,OWN04,CAT03,In Progress,Medium,CAT03|Medium,Pending,,No,Current in-progress item
+ITEM-0028,OPS-2026-028,2026-06-04,2026-06-07,2026-06-06,2026-06,SA04,OWN07,CAT05,Closed,High,CAT05|High,Present,evidence/item-0028,No,Closed within target
+ITEM-0029,OPS-2026-029,2026-06-07,2026-06-14,,2026-06,SA03,OWN05,CAT04,Open,Low,CAT04|Low,Not required,,No,Open low priority item
+ITEM-0030,OPS-2026-030,2026-06-09,2026-06-12,,2026-06,SA02,OWN03,CAT01,Open,High,CAT01|High,Pending,,Yes,Open item requiring review
+ITEM-0031,OPS-2026-031,2026-06-11,,2026-06-16,2026-06,SA01,OWN01,CAT02,Closed,Medium,CAT02|Medium,Missing,,Yes,Closed with missing due date and evidence
+ITEM-0032,OPS-2026-032,2026-06-12,2026-06-19,,2026-06,SA04,OWN08,CAT06,In Progress,Low,CAT06|Low,Pending,,No,Due at reporting date

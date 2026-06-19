@@ -1,0 +1,17 @@
+target_key,target_id,category_id,priority,target_days,target_met_rate,effective_from,effective_to,target_owner_role,notes
+CAT01|Critical,TGT-001,CAT01,Critical,2,0.90,2026-01-01,2026-12-31,Reporting Lead,Critical access items need rapid closure
+CAT01|High,TGT-002,CAT01,High,3,0.85,2026-01-01,2026-12-31,Reporting Lead,High priority access items
+CAT01|Medium,TGT-003,CAT01,Medium,5,0.80,2026-01-01,2026-12-31,Reporting Lead,Standard access items
+CAT02|Critical,TGT-004,CAT02,Critical,4,0.85,2026-01-01,2026-12-31,Service Owner,Critical fulfilment items
+CAT02|Medium,TGT-005,CAT02,Medium,7,0.75,2026-01-01,2026-12-31,Service Owner,Standard fulfilment items
+CAT02|Low,TGT-006,CAT02,Low,10,0.70,2026-01-01,2026-12-31,Service Owner,Low priority fulfilment items
+CAT03|Critical,TGT-007,CAT03,Critical,3,0.90,2026-01-01,2026-12-31,Operations Manager,Critical incident support
+CAT03|High,TGT-008,CAT03,High,5,0.85,2026-01-01,2026-12-31,Operations Manager,High priority incident support
+CAT03|Medium,TGT-009,CAT03,Medium,7,0.80,2026-01-01,2026-12-31,Operations Manager,Medium incident support
+CAT04|High,TGT-010,CAT04,High,4,0.82,2026-01-01,2026-12-31,Assurance Lead,High priority assurance checks
+CAT04|Low,TGT-011,CAT04,Low,8,0.70,2026-01-01,2026-12-31,Assurance Lead,Low priority assurance checks
+CAT05|Critical,TGT-012,CAT05,Critical,2,0.92,2026-01-01,2026-12-31,Service Desk Lead,Critical service desk activity
+CAT05|High,TGT-013,CAT05,High,4,0.85,2026-01-01,2026-12-31,Service Desk Lead,High priority service desk activity
+CAT05|Medium,TGT-014,CAT05,Medium,7,0.78,2026-01-01,2026-12-31,Service Desk Lead,Medium priority service desk activity
+CAT06|Medium,TGT-015,CAT06,Medium,7,0.75,2026-01-01,2026-12-31,Improvement Lead,Improvement items with target
+CAT06|Low,TGT-016,CAT06,Low,14,0.65,2026-01-01,2026-12-31,Improvement Lead,Low priority improvement items

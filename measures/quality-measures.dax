@@ -1,0 +1,67 @@
+-- Data readiness and quality guardrail measures.
+-- These measures are report-level warnings. They do not replace the
+-- operational-data-quality-engine exception register.
+
+Missing Owner Count =
+CALCULATE (
+    [Total Items],
+    ISBLANK ( 'fact_operational_item'[owner_id] )
+)
+
+Missing Due Date Count =
+CALCULATE (
+    [Total Items],
+    ISBLANK ( 'fact_operational_item'[due_date] )
+)
+
+Missing Target Key Count =
+CALCULATE (
+    [Total Items],
+    ISBLANK ( 'fact_operational_item'[target_key] )
+)
+
+Target Matched Items =
+COUNTROWS (
+    FILTER (
+        'fact_operational_item',
+        NOT ISBLANK ( 'fact_operational_item'[target_key] )
+            && CONTAINS (
+                VALUES ( 'fact_target'[target_key] ),
+                'fact_target'[target_key],
+                'fact_operational_item'[target_key]
+            )
+    )
+)
+
+Target Coverage Rate =
+DIVIDE (
+    [Target Matched Items],
+    [Total Items]
+)
+
+Closed Missing Evidence Count =
+COUNTROWS (
+    FILTER (
+        'fact_operational_item',
+        'fact_operational_item'[status] = "Closed"
+            && (
+                'fact_operational_item'[evidence_status] = "Missing"
+                    || ISBLANK ( 'fact_operational_item'[closure_evidence_link] )
+            )
+    )
+)
+
+SLA Excluded Closed Items =
+[Closed Items] - [Closed Items With Valid SLA Inputs]
+
+Data Readiness Issue Count =
+[Missing Owner Count]
+    + [Missing Due Date Count]
+    + [Missing Target Key Count]
+    + [Closed Missing Evidence Count]
+
+Records With Review Flag Rate =
+DIVIDE (
+    [Review Flag Count],
+    [Total Items]
+)

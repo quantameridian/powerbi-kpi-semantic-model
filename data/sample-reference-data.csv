@@ -1,0 +1,28 @@
+reference_type,reference_id,reference_name,parent_reference_id,active_flag,sort_order,notes
+service_area,SA01,Customer Operations,,true,1,Generic customer operations team
+service_area,SA02,Service Assurance,,true,2,Generic assurance team
+service_area,SA03,Reporting Support,,true,3,Generic reporting support team
+service_area,SA04,Process Improvement,,true,4,Generic improvement team
+owner,OWN01,Operations Lead,SA01,true,1,Role-based owner not a real person
+owner,OWN02,Case Coordinator,SA01,true,2,Role-based owner not a real person
+owner,OWN03,Assurance Analyst,SA02,true,3,Role-based owner not a real person
+owner,OWN04,Service Manager,SA02,true,4,Role-based owner not a real person
+owner,OWN05,Reporting Analyst,SA03,true,5,Role-based owner not a real person
+owner,OWN06,Reporting Lead,SA03,true,6,Role-based owner not a real person
+owner,OWN07,Improvement Analyst,SA04,true,7,Role-based owner not a real person
+owner,OWN08,Improvement Lead,SA04,true,8,Role-based owner not a real person
+category,CAT01,Access Request,,true,1,Request or permission related item
+category,CAT02,Service Fulfilment,,true,2,General fulfilment item
+category,CAT03,Incident Support,,true,3,Support or incident item
+category,CAT04,Assurance Check,,true,4,Review or assurance activity
+category,CAT05,Service Desk Query,,true,5,General service desk request
+category,CAT06,Improvement Action,,true,6,Improvement or process action
+status,Open,Open,,true,1,Unresolved item not yet in active delivery
+status,In Progress,In Progress,,true,2,Unresolved item being worked
+status,Paused,Paused,,true,3,Unresolved item waiting on dependency
+status,Closed,Closed,,true,4,Completed item
+status,Cancelled,Cancelled,,true,5,Stopped item excluded from closure performance
+priority,Critical,Critical,,true,1,Highest review priority
+priority,High,High,,true,2,High review priority
+priority,Medium,Medium,,true,3,Standard priority
+priority,Low,Low,,true,4,Low priority

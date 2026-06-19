@@ -1,0 +1,15 @@
+{
+  "name": "Portfolio KPI Reporting Theme",
+  "dataColors": [
+    "#245C7A",
+    "#3D7A4D",
+    "#C4932F",
+    "#A64242",
+    "#6B5FA8",
+    "#4F6F68",
+    "#8A6F3D"
+  ],
+  "background": "#ffffff",
+  "foreground": "#1f2933",
+  "tableAccent": "#245C7A"
+}
