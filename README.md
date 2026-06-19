@@ -1,6 +1,8 @@
 # Power BI KPI Semantic Model
 
 [![CI](https://github.com/quantameridian/powerbi-kpi-semantic-model/actions/workflows/ci.yml/badge.svg)](https://github.com/quantameridian/powerbi-kpi-semantic-model/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/quantameridian/powerbi-kpi-semantic-model/actions/workflows/codeql.yml/badge.svg)](https://github.com/quantameridian/powerbi-kpi-semantic-model/actions/workflows/codeql.yml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/quantameridian/powerbi-kpi-semantic-model/badge)](https://scorecard.dev/viewer/?uri=github.com/quantameridian/powerbi-kpi-semantic-model)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ## Project purpose
@@ -203,6 +205,8 @@ Current quality checks:
 - review and limitation documents are checked for key hard-stop language;
 - docs state clearly that no Power BI artefact exists yet;
 - screenshots are prohibited until generated from a real report build.
+
+Security posture, Power BI artifact boundaries, and public-data rules are documented in [docs/security-posture.md](docs/security-posture.md).
 
 The next validation step is Power BI Desktop testing of table names, data types, relationships, and DAX syntax.
 

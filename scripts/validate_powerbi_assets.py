@@ -19,6 +19,7 @@ REPORT_PATH = Path("docs/validation-report.md")
 REQUIRED_REVIEW_DOCS = [
     Path("docs/powerbi-build-qa-checklist.md"),
     Path("docs/semantic-model-review-rubric.md"),
+    Path("docs/security-posture.md"),
     Path("docs/limitations.md"),
 ]
 
@@ -137,6 +138,11 @@ def _validate_review_docs(errors: list[str], notes: list[str]) -> None:
             "PBIP",
             "DAX measures",
             "Hard stop conditions",
+        ],
+        Path("docs/security-posture.md"): [
+            "Power BI Artifact Boundary",
+            "tenant IDs",
+            "refresh credentials",
         ],
         Path("docs/limitations.md"): [
             "not yet a finished Power BI report",
