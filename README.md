@@ -1,5 +1,8 @@
 # Power BI KPI Semantic Model
 
+[![CI](https://github.com/quantameridian/powerbi-kpi-semantic-model/actions/workflows/ci.yml/badge.svg)](https://github.com/quantameridian/powerbi-kpi-semantic-model/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 ## Project purpose
 
 This repository is a Power BI semantic model and KPI design portfolio project for operational reporting.
@@ -7,6 +10,18 @@ This repository is a Power BI semantic model and KPI design portfolio project fo
 It demonstrates the modelling work that should happen before dashboard visuals are built: sample data design, table grain, KPI definitions, target logic, DAX measure structure, report navigation planning, refresh assumptions, and handover notes.
 
 No Power BI Desktop report artefact is included yet. There is no PBIP, PBIR, PBIX, report page, or screenshot in the current repository. That is intentional: those files should only be added after a real Power BI Desktop build exists and has been reopened, refreshed, and checked.
+
+## Reviewer quick path
+
+If you are reviewing this quickly, start here:
+
+1. Read the current repository state table below.
+2. Inspect `powerbi/semantic-model/model-contract.json` for the planned table, column, relationship, and measure contract.
+3. Read `docs/validation-report.md` for the current automated validation result.
+4. Read `docs/semantic-model-review-rubric.md` for the commercial review gates that are not yet passed.
+5. Run `make qa` to validate JSON, CSV shapes, DAX catalogue references, review documents, and regenerate the validation report.
+
+Harsh limitation: this is still not a finished Power BI build. A serious Power BI reviewer should treat it as a validated semantic-model plan until a real PBIP/TMDL artifact is added.
 
 ## Business problem
 
@@ -42,8 +57,12 @@ This project frames a semantic model for a generic service or operations team th
 | KPI dictionary | `docs/kpi-dictionary.md` |
 | DAX catalogue | `measures/core-measures.dax`, `measures/quality-measures.dax`, `measures/trend-measures.dax` |
 | DAX explanation | `docs/dax-measures.md` |
+| Model contract | `powerbi/semantic-model/model-contract.json` |
+| Automated validation report | `docs/validation-report.md` |
+| Semantic model review rubric | `docs/semantic-model-review-rubric.md` |
 | Report navigation plan | `docs/report-navigation.md` |
 | Refresh and handover plan | `docs/refresh-and-handover.md` |
+| Power BI build QA checklist | `docs/powerbi-build-qa-checklist.md` |
 | Power BI artefact plan | `powerbi/README.md` |
 | Theme draft | `theme/report-theme.json` |
 | Power BI Desktop artefacts | Not included yet |
@@ -121,11 +140,15 @@ See `docs/model-design.md` for table grain, relationship assumptions, and bounda
 
 The KPI dictionary defines the business meaning and interpretation of each measure. The DAX catalogue provides draft measures that map to the planned semantic model.
 
-The DAX files are intentionally plain text so they can be reviewed in GitHub. They have not yet been validated inside Power BI Desktop because the Power BI model has not been built.
+The DAX files are intentionally plain text so they can be reviewed in GitHub. The repository validator checks that measure definitions and table-column references are consistent with the model contract. They have not yet been validated inside Power BI Desktop because the Power BI model has not been built.
 
 ## How to use this repository
 
-There is no local command to run because no Power BI project file exists yet.
+There is no Power BI Desktop command to run because no Power BI project file exists yet. There is, however, a repository validation command:
+
+```bash
+make qa
+```
 
 Recommended review path:
 
@@ -134,6 +157,7 @@ Recommended review path:
 3. Inspect the DAX files in `measures/`.
 4. Read `docs/dax-measures.md` for measure grouping and validation notes.
 5. Review `docs/report-navigation.md` and `docs/refresh-and-handover.md` to understand how a future report should be built, refreshed, governed, and handed over.
+6. Review `docs/powerbi-build-qa-checklist.md` and `docs/semantic-model-review-rubric.md` before treating the repository as an implemented Power BI model.
 
 Manual Power BI Desktop build steps are documented in `powerbi/README.md` and `docs/refresh-and-handover.md`.
 
@@ -147,8 +171,12 @@ Current outputs:
 - KPI dictionary;
 - DAX measure catalogue;
 - DAX explanation document;
+- source-controlled model contract;
+- automated validation report;
+- semantic-model review rubric;
 - report navigation plan;
 - refresh and handover plan;
+- Power BI Desktop build QA checklist;
 - Power BI artefact plan;
 - public-readiness audit.
 
@@ -161,13 +189,18 @@ Not included:
 
 ## Tests and quality checks
 
-There is no automated test suite in this repository yet because the semantic model has not been created in Power BI Desktop.
+There is an automated repository validation suite, but it does not replace Power BI Desktop validation.
 
-Current quality checks are documentation and artefact checks:
+Current quality checks:
 
 - sample data is synthetic and non-client;
 - KPI definitions are documented before visuals;
 - DAX measures are separated into reviewable files;
+- JSON theme syntax is validated;
+- source CSV headers and row counts are checked against the model contract;
+- DAX measure definitions are checked against the contract;
+- DAX table-column references are checked against the planned table contract;
+- review and limitation documents are checked for key hard-stop language;
 - docs state clearly that no Power BI artefact exists yet;
 - screenshots are prohibited until generated from a real report build.
 
@@ -193,5 +226,6 @@ See `docs/limitations.md` for the full limitation statement.
 
 1. Build the model in Power BI Desktop from the repository CSV files.
 2. Validate relationships, data types, and DAX measures against the sample rows.
-3. Save a valid Power BI Project only after it opens and refreshes correctly.
-4. Add screenshots only after they are generated from the actual report.
+3. Run Tabular Editor Best Practice Analyzer or equivalent semantic-model review.
+4. Save a valid Power BI Project only after it opens and refreshes correctly.
+5. Add screenshots only after they are generated from the actual report.

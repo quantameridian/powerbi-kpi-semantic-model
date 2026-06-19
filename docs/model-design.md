@@ -6,6 +6,11 @@ The intended model is a small Power BI semantic model for operational KPI report
 
 This document describes the model design and sample-data route. No Power BI Desktop model, PBIP folder, or PBIX file currently exists in this repository.
 
+The source-controlled contract for the planned model is maintained in
+`powerbi/semantic-model/model-contract.json`. It is validated by
+`scripts/validate_powerbi_assets.py`, but it is not a substitute for a real
+Power BI Desktop semantic model.
+
 ## Reporting concept
 
 The report represents a generic service or operations function managing a queue of work items. Each item has an owner, service area, category, priority, status, due date, and possible closure date. The report should help managers review demand, backlog, timeliness, target performance, and reporting-data readiness.
@@ -116,3 +121,10 @@ Power BI Desktop implementation should check:
 - totals and filtered views are explainable;
 - targets are applied only where a valid target row exists;
 - screenshots, if added, match the actual report state.
+
+Repository validation before the Desktop build should check:
+
+- source CSV headers and row counts match the model contract;
+- DAX measure names match the contract;
+- DAX table-column references point to planned model columns;
+- the theme JSON remains valid.

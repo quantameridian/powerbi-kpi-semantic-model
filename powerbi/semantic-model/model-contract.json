@@ -1,0 +1,177 @@
+{
+  "status": "planned_contract_not_pbip",
+  "description": "Source-controlled contract for the planned Power BI semantic model. This is not a Power BI Desktop project, PBIP, PBIR, PBIX, or validated Tabular model.",
+  "source_files": {
+    "data/sample-operational-data.csv": {
+      "row_count": 32,
+      "columns": [
+        "item_id",
+        "item_reference",
+        "opened_date",
+        "due_date",
+        "closed_date",
+        "reporting_period",
+        "service_area_id",
+        "owner_id",
+        "category_id",
+        "status",
+        "priority",
+        "target_key",
+        "evidence_status",
+        "closure_evidence_link",
+        "review_flag",
+        "notes"
+      ]
+    },
+    "data/sample-targets.csv": {
+      "row_count": 16,
+      "columns": [
+        "target_key",
+        "target_id",
+        "category_id",
+        "priority",
+        "target_days",
+        "target_met_rate",
+        "effective_from",
+        "effective_to",
+        "target_owner_role",
+        "notes"
+      ]
+    },
+    "data/sample-reference-data.csv": {
+      "row_count": 27,
+      "columns": [
+        "reference_type",
+        "reference_id",
+        "reference_name",
+        "parent_reference_id",
+        "active_flag",
+        "sort_order",
+        "notes"
+      ]
+    }
+  },
+  "tables": {
+    "fact_operational_item": {
+      "grain": "One row per operational work item",
+      "source": "data/sample-operational-data.csv",
+      "columns": [
+        "item_id",
+        "item_reference",
+        "opened_date",
+        "due_date",
+        "closed_date",
+        "reporting_period",
+        "service_area_id",
+        "owner_id",
+        "category_id",
+        "status",
+        "priority",
+        "target_key",
+        "evidence_status",
+        "closure_evidence_link",
+        "review_flag",
+        "notes"
+      ]
+    },
+    "fact_target": {
+      "grain": "One row per category, priority, and target key",
+      "source": "data/sample-targets.csv",
+      "columns": [
+        "target_key",
+        "target_id",
+        "category_id",
+        "priority",
+        "target_days",
+        "target_met_rate",
+        "effective_from",
+        "effective_to",
+        "target_owner_role",
+        "notes"
+      ]
+    },
+    "dim_date": {
+      "grain": "One row per calendar date",
+      "source": "Generated during Power BI Desktop build",
+      "columns": ["date", "year", "month_number", "month_name", "month_start_date", "reporting_period"]
+    },
+    "dim_service_area": {
+      "grain": "One row per service area reference value",
+      "source": "data/sample-reference-data.csv where reference_type = service_area",
+      "columns": ["service_area_id", "service_area_name", "active_flag", "sort_order"]
+    },
+    "dim_owner": {
+      "grain": "One row per owner reference value",
+      "source": "data/sample-reference-data.csv where reference_type = owner",
+      "columns": ["owner_id", "owner_name", "service_area_id", "active_flag", "sort_order"]
+    },
+    "dim_category": {
+      "grain": "One row per category reference value",
+      "source": "data/sample-reference-data.csv where reference_type = category",
+      "columns": ["category_id", "category_name", "service_area_id", "active_flag", "sort_order"]
+    },
+    "dim_status": {
+      "grain": "One row per status reference value",
+      "source": "data/sample-reference-data.csv where reference_type = status",
+      "columns": ["status", "status_name", "active_flag", "sort_order"]
+    },
+    "dim_priority": {
+      "grain": "One row per priority reference value",
+      "source": "data/sample-reference-data.csv where reference_type = priority",
+      "columns": ["priority", "priority_name", "active_flag", "sort_order"]
+    }
+  },
+  "relationships": [
+    {"from": "dim_service_area.service_area_id", "to": "fact_operational_item.service_area_id", "cardinality": "one_to_many", "filter_direction": "single"},
+    {"from": "dim_owner.owner_id", "to": "fact_operational_item.owner_id", "cardinality": "one_to_many", "filter_direction": "single"},
+    {"from": "dim_category.category_id", "to": "fact_operational_item.category_id", "cardinality": "one_to_many", "filter_direction": "single"},
+    {"from": "dim_status.status", "to": "fact_operational_item.status", "cardinality": "one_to_many", "filter_direction": "single"},
+    {"from": "dim_priority.priority", "to": "fact_operational_item.priority", "cardinality": "one_to_many", "filter_direction": "single"},
+    {"from": "fact_target.target_key", "to": "fact_operational_item.target_key", "cardinality": "one_to_many_lookup", "filter_direction": "single"},
+    {"from": "dim_date.date", "to": "fact_operational_item.opened_date", "cardinality": "one_to_many", "filter_direction": "single"}
+  ],
+  "measure_files": [
+    "measures/core-measures.dax",
+    "measures/quality-measures.dax",
+    "measures/trend-measures.dax"
+  ],
+  "measures": [
+    "Total Items",
+    "Open Items",
+    "Paused Items",
+    "Closed Items",
+    "Cancelled Items",
+    "Backlog Items",
+    "Report Date",
+    "Overdue Active Items",
+    "Due Soon Items",
+    "Average Cycle Time Days",
+    "Closed Items With Valid SLA Inputs",
+    "SLA Met Items",
+    "SLA Met Rate",
+    "High Priority Active Items",
+    "High Priority Overdue Items",
+    "Review Flag Count",
+    "Missing Owner Count",
+    "Missing Due Date Count",
+    "Missing Target Key Count",
+    "Target Matched Items",
+    "Target Coverage Rate",
+    "Closed Missing Evidence Count",
+    "SLA Excluded Closed Items",
+    "Data Readiness Issue Count",
+    "Records With Review Flag Rate",
+    "Open Items Previous Month",
+    "MoM Open Item Change",
+    "MoM Open Item Change %",
+    "Closed Items Previous Month",
+    "MoM Closed Item Change",
+    "MoM Closed Item Change %",
+    "Overdue Active Items Previous Month",
+    "MoM Overdue Active Item Change",
+    "SLA Met Rate Previous Month",
+    "MoM SLA Met Rate Change",
+    "Average Cycle Time Previous Month",
+    "MoM Average Cycle Time Change"
+  ]
+}
