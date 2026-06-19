@@ -13,7 +13,7 @@ Commercial-readiness limitation: the repository still fails the implemented-mode
 - Validated 7 planned relationships
 - Validated 37 DAX measure definitions
 - Validated 13 DAX table-column references
-- Validated 4 review and limitation documents
+- Validated 5 review and limitation documents
 
 ## Current Verdict
 

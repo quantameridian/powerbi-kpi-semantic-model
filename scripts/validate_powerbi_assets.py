@@ -17,6 +17,7 @@ CONTRACT_PATH = Path("powerbi/semantic-model/model-contract.json")
 THEME_PATH = Path("theme/report-theme.json")
 REPORT_PATH = Path("docs/validation-report.md")
 REQUIRED_REVIEW_DOCS = [
+    Path("docs/reviewer-guide.md"),
     Path("docs/powerbi-build-qa-checklist.md"),
     Path("docs/semantic-model-review-rubric.md"),
     Path("docs/security-posture.md"),
@@ -129,6 +130,11 @@ def _validate_dax(contract: dict, errors: list[str], notes: list[str]) -> None:
 
 def _validate_review_docs(errors: list[str], notes: list[str]) -> None:
     required_phrases = {
+        Path("docs/reviewer-guide.md"): [
+            "What This Repository Proves",
+            "Current Limitations",
+            "PBIP",
+        ],
         Path("docs/semantic-model-review-rubric.md"): [
             "Power BI Desktop build",
             "Source-controlled artifact",

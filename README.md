@@ -17,11 +17,12 @@ No Power BI Desktop report artefact is included yet. There is no PBIP, PBIR, PBI
 
 If you are reviewing this quickly, start here:
 
-1. Read the current repository state table below.
-2. Inspect `powerbi/semantic-model/model-contract.json` for the planned table, column, relationship, and measure contract.
-3. Read `docs/validation-report.md` for the current automated validation result.
-4. Read `docs/semantic-model-review-rubric.md` for the commercial review gates that are not yet passed.
-5. Run `make qa` to validate JSON, CSV shapes, DAX catalogue references, review documents, and regenerate the validation report.
+1. Read [docs/reviewer-guide.md](docs/reviewer-guide.md).
+2. Read the current repository state table below.
+3. Inspect `powerbi/semantic-model/model-contract.json` for the planned table, column, relationship, and measure contract.
+4. Read `docs/validation-report.md` for the current automated validation result.
+5. Read `docs/semantic-model-review-rubric.md` for the commercial review gates that are not yet passed.
+6. Run `make qa` to validate JSON, CSV shapes, DAX catalogue references, review documents, and regenerate the validation report.
 
 Harsh limitation: this is still not a finished Power BI build. A serious Power BI reviewer should treat it as a validated semantic-model plan until a real PBIP/TMDL artifact is added.
 
@@ -48,6 +49,17 @@ This project frames a semantic model for a generic service or operations team th
 - Report navigation plan based on management review questions.
 - Refresh, validation, ownership, change-control, and handover approach.
 - Honest artefact boundaries where no Power BI report file exists yet.
+
+## Skills demonstrated
+
+| Skill | Where to inspect |
+| --- | --- |
+| KPI definition design | [docs/kpi-dictionary.md](docs/kpi-dictionary.md) |
+| Semantic model planning | [docs/model-design.md](docs/model-design.md) and `powerbi/semantic-model/model-contract.json` |
+| DAX measure organisation | `measures/` and [docs/dax-measures.md](docs/dax-measures.md) |
+| BI governance and handover | [docs/refresh-and-handover.md](docs/refresh-and-handover.md) and [docs/report-navigation.md](docs/report-navigation.md) |
+| Honest artifact boundary management | [docs/semantic-model-review-rubric.md](docs/semantic-model-review-rubric.md) and [docs/powerbi-build-qa-checklist.md](docs/powerbi-build-qa-checklist.md) |
+| Security-aware public repo practice | [docs/security-posture.md](docs/security-posture.md), CI, CodeQL, and Scorecard |
 
 ## Current repository state
 
