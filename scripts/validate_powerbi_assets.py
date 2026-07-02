@@ -20,6 +20,8 @@ REQUIRED_REVIEW_DOCS = [
     Path("docs/reviewer-guide.md"),
     Path("docs/powerbi-build-qa-checklist.md"),
     Path("docs/semantic-model-review-rubric.md"),
+    Path("docs/rls-and-access-model.md"),
+    Path("docs/semantic-model-change-control.md"),
     Path("docs/security-posture.md"),
     Path("docs/limitations.md"),
 ]
@@ -145,6 +147,16 @@ def _validate_review_docs(errors: list[str], notes: list[str]) -> None:
             "DAX measures",
             "Hard stop conditions",
         ],
+        Path("docs/rls-and-access-model.md"): [
+            "RLS",
+            "Power BI Desktop",
+            "Current Verdict",
+        ],
+        Path("docs/semantic-model-change-control.md"): [
+            "Change Types",
+            "Review Gates",
+            "PBIP/TMDL",
+        ],
         Path("docs/security-posture.md"): [
             "Power BI Artifact Boundary",
             "tenant IDs",
@@ -186,7 +198,7 @@ def _write_report(notes: list[str]) -> None:
                 "",
                 "## Current Verdict",
                 "",
-                "The repository is internally consistent for a planned semantic model, but it still needs a real Power BI Desktop PBIP/TMDL build before it should be treated as an implemented semantic model.",
+                "The repository is internally consistent for a planned semantic model, including governance, change-control, and access-design documents, but it still needs a real Power BI Desktop PBIP/TMDL build before it should be treated as an implemented semantic model.",
                 "",
             ]
         ),

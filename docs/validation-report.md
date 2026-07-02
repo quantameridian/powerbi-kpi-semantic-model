@@ -13,8 +13,8 @@ Commercial-readiness limitation: the repository still fails the implemented-mode
 - Validated 7 planned relationships
 - Validated 37 DAX measure definitions
 - Validated 13 DAX table-column references
-- Validated 5 review and limitation documents
+- Validated 7 review and limitation documents
 
 ## Current Verdict
 
-The repository is internally consistent for a planned semantic model, but it still needs a real Power BI Desktop PBIP/TMDL build before it should be treated as an implemented semantic model.
+The repository is internally consistent for a planned semantic model, including governance, change-control, and access-design documents, but it still needs a real Power BI Desktop PBIP/TMDL build before it should be treated as an implemented semantic model.
