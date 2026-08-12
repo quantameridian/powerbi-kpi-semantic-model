@@ -2,13 +2,13 @@
 
 ## Reporting A Vulnerability
 
-Do not open a public issue for suspected secret exposure, unsafe report access or a vulnerable dependency. Use GitHub private vulnerability reporting when it is available, or contact the repository owner through the GitHub profile.
+Do not open a public issue for suspected secret exposure, unsafe report access or a vulnerable dependency. Use [GitHub private vulnerability reporting](https://github.com/quantameridian/powerbi-kpi-semantic-model/security/advisories/new), or contact the repository owner through the GitHub profile.
 
 Include the affected file or workflow, a safe reproduction, the likely impact and any proposed remediation. Do not attach real credentials or confidential data to the report.
 
 ## Supported Scope
 
-The maintained scope is the current default branch. This repository is a synthetic example and is not approved for client, employee or protected data.
+Security corrections apply to the current `main` branch. There are no supported release branches or deployed service versions. This repository is a synthetic example and is not approved for client, employee or protected data.
 
 ## Data And Credential Boundary
 
