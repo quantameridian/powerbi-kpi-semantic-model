@@ -20,7 +20,7 @@ An unmapped identity should receive no operational rows. This deny by default re
 
 ## Deployment Responsibilities
 
-The public fixture demonstrates model logic, not service membership. A deployment must replace the sample identities with an approved entitlement source, assign Microsoft Entra security groups to the semantic model role and keep consumers on permissions that allow RLS to be enforced.
+The public fixture shows the model logic, not service membership. A deployment must replace the sample identities with an approved entitlement source, assign Microsoft Entra security groups to the semantic model role and keep consumers on permissions that allow RLS to be enforced.
 
 Workspace administrators, members and contributors can have permissions that make RLS behave differently from a view only consumer. Role testing therefore needs both Desktop simulation and a service test account with the intended workspace and semantic model permissions.
 

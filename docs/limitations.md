@@ -2,7 +2,7 @@
 
 The project source is structurally validated, but the current commit has not been opened and refreshed in Power BI Desktop on Windows. It therefore does not claim rendered page acceptance, DAX engine execution, Power Query refresh acceptance or role simulation.
 
-The synthetic dataset contains 32 items across six months. It is useful for checking definitions and failure cases, not for demonstrating scale, compression, query folding, incremental refresh or capacity performance.
+The synthetic dataset contains 32 items across six months. It is useful for checking definitions and failure cases, not for proving scale, compression, query folding, incremental refresh or capacity performance.
 
 The source records current status rather than status events. Historical backlog can be reconstructed from opened and closed dates, but time spent paused and earlier status transitions cannot be recovered. Closed records without a closure date remain a readiness issue and cannot be placed in a completion period.
 
