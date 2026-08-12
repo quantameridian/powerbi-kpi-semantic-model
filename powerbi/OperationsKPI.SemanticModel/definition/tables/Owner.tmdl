@@ -1,0 +1,46 @@
+/// Role based operational owner. The sample contains no personal names.
+table Owner
+
+	column owner_id
+		dataType: string
+		isHidden
+		isKey
+		summarizeBy: none
+		sourceColumn: owner_id
+
+	column 'Owner Name'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: owner_name
+
+	column service_area_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: service_area_id
+
+	column 'Active Flag'
+		dataType: boolean
+		isHidden
+		summarizeBy: none
+		sourceColumn: active_flag
+
+	column 'Sort Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: sort_order
+
+	partition Owner = m
+		mode: import
+		source = ```
+				let
+					Filtered = Table.SelectRows(ReferenceSource, each [reference_type] = "owner"),
+					Selected = Table.SelectColumns(Filtered, {"reference_id", "reference_name", "parent_reference_id", "active_flag", "sort_order"}),
+					Renamed = Table.RenameColumns(Selected, {{"reference_id", "owner_id"}, {"reference_name", "owner_name"}, {"parent_reference_id", "service_area_id"}})
+				in
+					Renamed
+				```
+
+	annotation PBI_ResultType = Table

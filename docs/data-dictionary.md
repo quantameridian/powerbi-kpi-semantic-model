@@ -1,84 +1,29 @@
 # Data Dictionary
 
-## Purpose
+All four CSV files are synthetic. Empty source fields are converted to null before type conversion.
 
-This dictionary describes the synthetic CSV files used to design the Power BI semantic model. The files are safe sample data for portfolio use and do not represent a real organisation or client.
+## Operational Items
 
-## Source files
+`sample-operational-data.csv` has one row per item. `item_id` is the stable key and `item_reference` is the report label. Opened, due and closed dates support intake, timeliness and completion analysis. `reporting_period` is retained for traceability but hidden because the conformed date table controls report periods.
 
-| File | Grain | Row count | Intended model role |
-| --- | --- | ---: | --- |
-| `data/sample-operational-data.csv` | One row per operational item | 32 | Fact table source |
-| `data/sample-targets.csv` | One row per target key | 16 | Target comparison table |
-| `data/sample-reference-data.csv` | One row per reference value | 27 | Dimension source |
+`service_area_id`, `owner_id`, `category_id`, `status` and `priority` join to controlled dimensions. `target_key` joins to the effective target. Evidence status, evidence link, review flag and notes support assurance detail.
 
-## `sample-operational-data.csv`
+Blank owner, due date and closure date values are deliberate. They exercise readiness measures and denominator rules.
 
-| Field | Type | Meaning | Notes |
-| --- | --- | --- | --- |
-| `item_id` | Text | Stable operational item key | Planned primary key for `fact_operational_item` |
-| `item_reference` | Text | Human-readable item reference | Synthetic, not copied from any real tracker |
-| `opened_date` | Date | Date the item was opened | Supports trend and cycle-time measures |
-| `due_date` | Date | Date the item is expected to complete | Some rows are blank to support readiness measures |
-| `closed_date` | Date | Date the item was completed | Blank for unresolved items |
-| `reporting_period` | Text | Month bucket for early reporting examples | Format `YYYY-MM`; later Power BI model should derive period from date tables |
-| `service_area_id` | Text | Service area reference key | Joins to service-area rows in reference data |
-| `owner_id` | Text | Owner role reference key | Some rows are blank to support missing-owner measures |
-| `category_id` | Text | Work category key | Joins to category rows in reference data |
-| `status` | Text | Current item status | Expected values: `Open`, `In Progress`, `Paused`, `Closed`, `Cancelled` |
-| `priority` | Text | Management priority | Expected values: `Critical`, `High`, `Medium`, `Low` |
-| `target_key` | Text | Category/priority key for target comparison | Joins to `sample-targets.csv` |
-| `evidence_status` | Text | Evidence state for reporting readiness | Expected values: `Present`, `Missing`, `Pending`, `Not required` |
-| `closure_evidence_link` | Text | Synthetic evidence path | Blank where no evidence exists or item is not closed |
-| `review_flag` | Text | Indicates whether a management review flag should be visible | Expected values: `Yes`, `No` |
-| `notes` | Text | Short synthetic context note | Included for model review, not intended for KPI aggregation |
+## Targets
 
-## `sample-targets.csv`
+`sample-targets.csv` has one row per `target_key`. Each row identifies its category, priority, target days, target met rate, effective dates and accountable role.
 
-| Field | Type | Meaning | Notes |
-| --- | --- | --- | --- |
-| `target_key` | Text | Category/priority key | Planned relationship key from operational items |
-| `target_id` | Text | Stable target identifier | Useful for target coverage checks |
-| `category_id` | Text | Category the target applies to | Joins to category reference rows |
-| `priority` | Text | Priority the target applies to | Joins conceptually to priority reference rows |
-| `target_days` | Integer | Expected completion window in calendar days | Used for SLA/timeliness measures |
-| `target_met_rate` | Decimal | Illustrative target rate for aggregated review | Example: `0.85` means 85 percent |
-| `effective_from` | Date | Target start date | Simplified for this sample |
-| `effective_to` | Date | Target end date | Simplified for this sample |
-| `target_owner_role` | Text | Role accountable for target interpretation | Role labels only, not real people |
-| `notes` | Text | Target context | Not intended for numeric aggregation |
+The current SLA measure uses the recorded due date and the target rate. `target_days` is retained for governance, but it is not used to recalculate the supplied due date.
 
-## `sample-reference-data.csv`
+## References
 
-| Field | Type | Meaning | Notes |
-| --- | --- | --- | --- |
-| `reference_type` | Text | Reference group | Values include `service_area`, `owner`, `category`, `status`, `priority` |
-| `reference_id` | Text | Reference key | Used to build dimensions |
-| `reference_name` | Text | Display label | Role-based and generic |
-| `parent_reference_id` | Text | Parent grouping where applicable | Owner rows link to service areas |
-| `active_flag` | Boolean text | Whether the reference value is active | Values: `true`, `false` |
-| `sort_order` | Integer | Display order | Useful for report slicers |
-| `notes` | Text | Reference context | Explains safe synthetic use |
+`sample-reference-data.csv` stores five reference types in one source file: service area, owner, category, status and priority. Power Query separates them into dimensions.
 
-## Planned dimensions from reference data
+`parent_reference_id` links owner roles to a service area in the source. The model does not add an Owner to Service Area relationship because both dimensions already filter the fact and a second path would risk ambiguity.
 
-The single reference CSV can be split in Power Query into:
+## Access Grants
 
-- `dim_service_area` from `reference_type = "service_area"`;
-- `dim_owner` from `reference_type = "owner"`;
-- `dim_category` from `reference_type = "category"`;
-- `dim_status` from `reference_type = "status"`;
-- `dim_priority` from `reference_type = "priority"`.
+`sample-security-access.csv` has one row per identity and service area grant. `active_flag` participates in the role filter. Every identity uses the reserved `example.invalid` domain.
 
-## Known sample-data imperfections
-
-The data deliberately includes:
-
-- blank `owner_id` values;
-- blank `due_date` values;
-- closed records with `evidence_status = "Missing"`;
-- unresolved high-priority or critical items;
-- late closures where `closed_date` is after `due_date`;
-- paused items that should not be treated the same as active in-progress work without a clear measure definition.
-
-These imperfections exist to support reporting-readiness and caveat measures in Power BI. They are not intended to imply real operational performance.
+The access file is a test fixture. A deployed model should read an approved entitlement source and retain the same deny by default behaviour for unmapped identities.

@@ -1,52 +1,27 @@
 # Security Posture
 
-## Scope
+This public repository contains synthetic data, project source and validation tools. It must remain safe to clone without exposing client data, tenant metadata, credentials or cached model contents.
 
-This is a public portfolio repository for Power BI semantic-model planning. It
-contains synthetic CSV files, DAX text, model documentation, and validation
-scripts. It must not contain real business data, tenant-specific configuration,
-Power BI credentials, refresh tokens, private workspace IDs, or screenshots from
-non-public reports.
+## Controls In Source
 
-## Current Controls
+GitHub workflows use read only repository permission except for the security event permission required by CodeQL and Scorecard. Action references are pinned to commit SHAs. npm and NuGet dependencies are pinned in lock files and monitored by Dependabot.
 
-- GitHub Actions CI uses read-only repository contents permission.
-- CodeQL scans the Python validation script.
-- OpenSSF Scorecard runs on the public repository and uploads SARIF results.
-- Dependabot version updates are configured for GitHub Actions.
-- The repository validator checks JSON, CSV shape, DAX references, and hard-stop
-  limitation documents.
-- Security reporting instructions are documented in `SECURITY.md`.
+Power BI cache files, local settings, unapplied query changes, PBIX files and common development outputs are ignored. The TMDL validator rejects personal machine paths and obvious credential patterns. Source queries use HTTPS and contain no authentication material.
 
-## Power BI Artifact Boundary
+The security fixture uses `example.invalid` identities. The role denies operational rows when no active identity mapping exists.
 
-No PBIP, PBIR, PBIX, TMDL, screenshot, or deployed semantic model artifact is
-currently committed. Future Power BI artifacts must be reviewed before commit.
+## Repository Settings
 
-Do not commit:
+GitHub settings should keep secret scanning, push protection, dependency alerts and private vulnerability reporting enabled. Protect `main` with required CI checks, blocked force pushes and a review requirement. Keep the default workflow token read only.
 
-- real report data or exported client datasets;
-- Power BI tenant IDs, workspace IDs, gateway details, or refresh credentials;
-- OAuth tokens, service principal secrets, certificates, or private keys;
-- screenshots from internal or non-public reports;
-- PBIX/PBIP files that contain cached real data;
-- personal paths, local machine names, or private source connection strings.
+## Power BI Deployment
 
-## GitHub Settings To Keep Enabled
+Do not publish this fixture and then substitute real identities or data in the public branch. A private deployment should source entitlements from a controlled system, manage credentials through Fabric or a gateway, and assign groups rather than individual accounts where practical.
 
-These controls live in GitHub repository settings rather than source files:
-
-- secret scanning and push protection;
-- Dependabot alerts and Dependabot security updates;
-- branch protection or repository rulesets for `main`;
-- required CI checks before merging;
-- blocked force pushes and branch deletion;
-- default workflow token permission set to read-only.
+RLS controls row visibility; it does not secure model metadata in the way object level security can. It also does not replace workspace, app, sharing or Build permission design. Export and downstream reuse need their own policy.
 
 ## Residual Risk
 
-The repository is not yet a validated Power BI model. Security review should not
-treat the DAX text or model contract as proof that a Desktop model has safe
-refresh behavior, correct tenant isolation, row-level security, or clean
-credential handling. Those controls must be reviewed after a real PBIP/TMDL
-artifact exists.
+PBIP, TMDL and PBIR are preview formats that can change with Desktop versions. The project has not completed a Windows refresh or service deployment test. The public web source is suitable for reproducibility, not for confidential or high availability reporting.
+
+Report suspected exposure privately using the route in `SECURITY.md`.

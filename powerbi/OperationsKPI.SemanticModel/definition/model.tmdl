@@ -1,0 +1,24 @@
+model Model
+	culture: en-GB
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-GB
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+ref table 'Operational Item'
+ref table Target
+ref table Date
+ref table 'Service Area'
+ref table Owner
+ref table Category
+ref table Status
+ref table Priority
+ref table 'Model Settings'
+ref table 'Access Bridge'
+ref table Measures
+
+ref role 'Service Area Manager'

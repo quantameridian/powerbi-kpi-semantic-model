@@ -1,262 +1,143 @@
-# Power BI KPI Semantic Model
+# Operations KPI Power BI Model
 
 [![CI](https://github.com/quantameridian/powerbi-kpi-semantic-model/actions/workflows/ci.yml/badge.svg)](https://github.com/quantameridian/powerbi-kpi-semantic-model/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/quantameridian/powerbi-kpi-semantic-model/actions/workflows/codeql.yml/badge.svg)](https://github.com/quantameridian/powerbi-kpi-semantic-model/actions/workflows/codeql.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/quantameridian/powerbi-kpi-semantic-model/badge)](https://scorecard.dev/viewer/?uri=github.com/quantameridian/powerbi-kpi-semantic-model)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-## Project purpose
+This repository contains a source controlled Power BI project for an operational service review. It follows work from opening through closure, applies category and priority targets, and keeps reporting risk visible beside the performance numbers.
 
-This repository is a public portfolio example of Power BI semantic model and KPI design work for operational reporting.
+The model is deliberately small enough to inspect. Its value is in the parts that usually become difficult to review once a report grows: table grain, date behaviour, target eligibility, DAX denominators, access filtering and release evidence.
 
-It shows the modelling work that should happen before anyone starts arranging dashboard visuals: sample data design, table grain, KPI definitions, target logic, DAX measure structure, report navigation, refresh assumptions, and handover notes.
+## Current State
 
-There is no Power BI Desktop report file here yet. No PBIP, PBIR, PBIX, report page, or screenshot is included. That is deliberate. Those files should only be added after a real Power BI Desktop build exists, opens cleanly, refreshes, and has been checked.
-
-## Portfolio focus
-
-This repo is designed to show the thinking that makes a Power BI report trustworthy before it becomes visual. It is strongest as evidence of KPI definition, semantic model planning, DAX organisation, governance, access design, and honest artifact control.
-
-A hiring or technical reviewer should be able to see the modelling decisions before any report page exists. The repo documents KPI meaning, denominators, caveats, data risks, table grain, planned relationships, DAX measure groups, RLS, refresh, change control, and handover. It also keeps a strict boundary around what is missing: it does not claim PBIX, PBIP, screenshots, or Desktop validation that do not exist yet.
-
-What this does not claim: this is not a finished Power BI report. It is a validated semantic model plan and DAX catalogue until a real PBIP/TMDL artifact is built and checked in Power BI Desktop.
-
-## Reviewer quick path
-
-If you only have a few minutes, start here:
-
-1. Read [docs/reviewer-guide.md](docs/reviewer-guide.md).
-2. Read the current repository state table below.
-3. Inspect `powerbi/semantic-model/model-contract.json` for the planned table, column, relationship, and measure contract.
-4. Read `docs/validation-report.md` for the current automated validation result.
-5. Read `docs/semantic-model-review-rubric.md` for the review gates that are not yet passed.
-6. Read [docs/rls-and-access-model.md](docs/rls-and-access-model.md) and [docs/semantic-model-change-control.md](docs/semantic-model-change-control.md) for the planned access and change controls.
-7. Run `make qa` to validate JSON, CSV shapes, DAX catalogue references, review documents, and regenerate the validation report.
-
-Important limitation: this is still not a finished Power BI build. Treat it as a validated semantic model plan until a real PBIP/TMDL artifact is added.
-
-## Business problem
-
-Operational reporting often grows from trackers, spreadsheet extracts, and dashboard pages where the KPI logic is difficult to inspect. A report can look polished but still be hard to trust if users cannot see:
-
-- what each KPI means;
-- which records are included or excluded;
-- whether the same definition is used across pages;
-- how targets are applied;
-- which team or service owns the result;
-- what caveats apply before the numbers are used in a review meeting.
-
-This project frames a semantic model for a generic service team that needs a consistent way to review workload, timeliness, backlog, service quality, target performance, and data readiness.
-
-## What this project shows
-
-- Power BI semantic model thinking before visual design.
-- Star schema planning for operational KPI reporting.
-- Safe synthetic sample data for fact, target, and reference inputs.
-- KPI dictionary with meaning, formula, grain, owner, interpretation, limitation, and data risk.
-- DAX measure catalogue grouped into core, quality, and trend measures.
-- Report navigation plan based on management review questions.
-- Refresh, validation, ownership, change control, and handover approach.
-- Clear boundary around the missing Power BI report file.
-
-## Skills demonstrated
-
-| Skill | Where to inspect |
+| Artifact | Evidence |
 | --- | --- |
-| KPI definition design | [docs/kpi-dictionary.md](docs/kpi-dictionary.md) |
-| Semantic model planning | [docs/model-design.md](docs/model-design.md) and `powerbi/semantic-model/model-contract.json` |
-| DAX measure organisation | `measures/` and [docs/dax-measures.md](docs/dax-measures.md) |
-| BI governance and handover | [docs/refresh-and-handover.md](docs/refresh-and-handover.md) and [docs/report-navigation.md](docs/report-navigation.md) |
-| Access and RLS design | [docs/rls-and-access-model.md](docs/rls-and-access-model.md) |
-| Model change control | [docs/semantic-model-change-control.md](docs/semantic-model-change-control.md) |
-| Artifact boundary management | [docs/semantic-model-review-rubric.md](docs/semantic-model-review-rubric.md) and [docs/powerbi-build-qa-checklist.md](docs/powerbi-build-qa-checklist.md) |
-| Public repo security practice | [docs/security-posture.md](docs/security-posture.md), CI, CodeQL, and Scorecard |
+| Power BI project | [`powerbi/OperationsKPI.pbip`](powerbi/OperationsKPI.pbip) points to the report and local semantic model |
+| Semantic model | 11 TMDL tables, 31 explicit measures, 10 relationships and one dynamic RLS role |
+| Report | Two PBIR pages with 10 bound visuals, using current visual types rather than legacy cards or tables |
+| Automated validation | Microsoft TOM deserialises the TMDL; Microsoft’s PBIR CLI validates the report; Python reconciles the source and expected KPI results |
+| Desktop acceptance | Still required on Windows for open, refresh, role simulation and rendered page review |
+| Screenshots | Not published until the Desktop acceptance run has produced evidence from this exact commit |
 
-## Current repository state
+## Business Context
 
-| Area | Current evidence |
-| --- | --- |
-| Sample data | Synthetic CSV files in `data/` |
-| Data dictionary | `docs/data-dictionary.md` |
-| Model design | `docs/model-design.md` |
-| KPI dictionary | `docs/kpi-dictionary.md` |
-| DAX catalogue | `measures/core-measures.dax`, `measures/quality-measures.dax`, `measures/trend-measures.dax` |
-| DAX explanation | `docs/dax-measures.md` |
-| Model contract | `powerbi/semantic-model/model-contract.json` |
-| Automated validation report | `docs/validation-report.md` |
-| Semantic model review rubric | `docs/semantic-model-review-rubric.md` |
-| Report navigation plan | `docs/report-navigation.md` |
-| Refresh and handover plan | `docs/refresh-and-handover.md` |
-| Power BI build QA checklist | `docs/powerbi-build-qa-checklist.md` |
-| Power BI artefact plan | `powerbi/README.md` |
-| Theme draft | `theme/report-theme.json` |
-| Power BI Desktop artefacts | Not included yet |
-| Screenshots | Not included yet |
+A service manager needs to know how much work is open, what is overdue, whether completed work met its service target and whether the underlying records are fit for review. Those questions become unreliable when target definitions sit in visual filters, closure dates are mixed with opened dates, or incomplete records disappear from the headline numbers.
 
-## Intended audience
+This project keeps the rules in the semantic model. The report can then answer two conversations:
 
-Primary readers:
+- The **Executive Summary** shows current workload, historical backlog, completions, overdue work and SLA performance.
+- **Assurance Detail** shows missing ownership, missing due dates, missing closure evidence and the records behind those warnings.
 
-- reporting leads responsible for KPI packs;
-- analytics engineers designing reusable reporting models;
-- Power BI developers who need clear measure and model definitions;
-- decision support or assurance teams checking whether report logic is traceable.
-
-Secondary readers:
-
-- hiring reviewers looking for evidence of semantic modelling, DAX structure, KPI ownership, governance thinking, and handover discipline;
-- service managers who need to understand what sits behind a reliable operational report.
-
-## Management questions
-
-The planned model supports practical review questions:
-
-- How much work is open, closed, overdue, or paused?
-- Which service areas or owner groups carry the largest backlog?
-- Are high priority items being resolved within target?
-- Which categories create the most work or longest cycle times?
-- Are KPI results improving or deteriorating over time?
-- Which results are affected by missing owner, target, due date, category, or evidence fields?
-- Which measures need review before the output is used in a formal pack?
+The sample is fixed at 30 June 2026 so that every clean run produces the same result.
 
 ## Architecture
 
-Current design route:
-
 ```mermaid
 flowchart LR
-    A["Synthetic operational sample data"] --> B["Power Query preparation"]
-    C["Synthetic target data"] --> B
-    D["Reference data"] --> B
-    B --> E["Star schema semantic model"]
-    E --> F["DAX measure catalogue"]
-    F --> G["Planned report pages"]
-    E --> H["KPI and model documentation"]
+    A["Synthetic operational CSV"] --> Q["Power Query import and typing"]
+    T["Synthetic targets and references"] --> Q
+    S["Synthetic access grants"] --> R["Dynamic RLS role"]
+    Q --> M["TMDL star schema"]
+    R --> M
+    M --> D["Explicit DAX measures"]
+    D --> P["PBIR report pages"]
+    M --> V["TOM and contract validation"]
+    P --> W["PBIR schema and binding validation"]
+    A --> C["Independent KPI calculations"]
+    C --> E["Expected result snapshot"]
 ```
 
-The diagram is the intended build route. It is not a claim that a Power BI Desktop model or report page currently exists.
+The active date relationship is `Date[Date]` to `Operational Item[Opened Date]`. Due and closed dates use inactive relationships. Measures that report completions activate the closed date path and disable the opened date path, which prevents the same date filter from constraining both events.
 
-## Sample data
+Historical backlog is reconstructed from opened and closed dates. Current backlog uses current status. Keeping both measures avoids presenting a current state count as if it were a historical snapshot.
 
-The repository includes safe synthetic sample data:
+## Repository Map
 
-| File | Purpose | Rows |
-| --- | --- | ---: |
-| `data/sample-operational-data.csv` | Operational work item data | 32 |
-| `data/sample-targets.csv` | Category/priority target thresholds | 16 |
-| `data/sample-reference-data.csv` | Reference values for dimensions | 27 |
+```text
+powerbi/
+  OperationsKPI.pbip
+  OperationsKPI.SemanticModel/definition/  TMDL model, role and relationships
+  OperationsKPI.Report/definition/         PBIR pages and visual bindings
+data/                                      Synthetic source and access records
+contracts/                                 Machine readable model and report contract
+docs/                                      Model, KPI, security and operating notes
+scripts/                                   Source checks and reference calculations
+tests/                                     Reviewed KPI result snapshot
+tools/tmdl-validator/                      Microsoft TOM deserialisation gate
+theme/                                     Versioned report theme source
+```
 
-The data represents generic operational reporting records only: service area, owner role, status, priority, opened date, closed date, due date, category, evidence state, review flag, and target threshold.
+## Run The Checks
 
-Do not add real client data, workplace data, internal material, or copied reporting documents.
-
-## Model design
-
-The planned model is a small star schema:
-
-- `fact_operational_item`: one row per work item;
-- `fact_target`: one row per target key and threshold;
-- dimensions for date, service area, owner, category, status, and priority;
-- DAX measures for workload, timeliness, target performance, data readiness, risk, and trend.
-
-See `docs/model-design.md` for table grain, relationship assumptions, and boundaries.
-
-## KPI and DAX catalogue
-
-The KPI dictionary defines the business meaning and interpretation of each measure. The DAX catalogue provides draft measures that map to the planned semantic model.
-
-The DAX files are plain text so they can be reviewed in GitHub. The repository validator checks that measure definitions and table column references match the model contract. They have not yet been validated inside Power BI Desktop because the Power BI model has not been built.
-
-## How to use this repository
-
-There is no Power BI Desktop command to run because no Power BI project file exists yet. There is, however, a repository validation command:
+The validation toolchain needs Node.js 20 or later and .NET 8. Python uses only the standard library.
 
 ```bash
+make install
 make qa
 ```
 
-Recommended review path:
+`make qa` runs five independent gates:
 
-1. Read `docs/model-design.md` to understand the planned star schema.
-2. Review `docs/kpi-dictionary.md` for KPI meaning, ownership, formulas, and risks.
-3. Inspect the DAX files in `measures/`.
-4. Read `docs/dax-measures.md` for measure grouping and validation notes.
-5. Review `docs/report-navigation.md` and `docs/refresh-and-handover.md` to understand how a future report should be built, refreshed, governed, and handed over.
-6. Review `docs/powerbi-build-qa-checklist.md` and `docs/semantic-model-review-rubric.md` before treating the repository as an implemented Power BI model.
+1. Unit tests compare the sample data with [`tests/expected-kpis.json`](tests/expected-kpis.json).
+2. The repository validator checks CSV contracts, keys, references, model objects, report bindings, documentation and security fixtures.
+3. Microsoft TOM deserialises the complete TMDL folder.
+4. Microsoft’s Power BI report authoring CLI validates PBIR schemas, visual roles, layout and theme registration.
+5. The evidence report is regenerated at [`docs/validation-report.md`](docs/validation-report.md).
 
-Manual Power BI Desktop build steps are documented in `powerbi/README.md` and `docs/refresh-and-handover.md`.
+CI also fails when the generated evidence differs from the committed copy.
 
-## Outputs
+## Reference Results
 
-Current outputs:
+These values are independently calculated from the CSVs. They are not exported from Power BI and therefore do not substitute for the Desktop acceptance test.
 
-- synthetic sample data;
-- data dictionary;
-- fact/dimension model design;
-- KPI dictionary;
-- DAX measure catalogue;
-- DAX explanation document;
-- model contract;
-- automated validation report;
-- semantic model review rubric;
-- RLS and access model design;
-- semantic model change control plan;
-- report navigation plan;
-- refresh and handover plan;
-- Power BI Desktop build QA checklist;
-- Power BI artefact plan;
-- public readiness audit.
+| Measure | Expected result |
+| --- | ---: |
+| Total items | 32 |
+| Current open items | 14 |
+| Current backlog, including paused work | 16 |
+| Overdue active items | 14 |
+| Closed items with valid SLA inputs | 13 |
+| SLA met items | 9 |
+| SLA met rate | 69.2% |
+| Weighted SLA target | 82.1% |
+| Records with a readiness issue | 7 |
+| Data readiness rate | 78.1% |
 
-Not included:
+The sample intentionally misses its weighted SLA target and contains incomplete records. A clean data story would make a weak assurance example.
 
-- PBIP, PBIR, PBIX, or Tabular Editor files;
-- report pages;
-- screenshots;
-- claims of live deployment, formal approval, or production use.
+## Engineering Evidence
 
-## Tests and quality checks
+The strongest technical evidence is in the source rather than the prose:
 
-There is an automated repository validation suite, but it does not replace Power BI Desktop validation.
+| Concern | Where it is implemented |
+| --- | --- |
+| Star schema and date paths | [`relationships.tmdl`](powerbi/OperationsKPI.SemanticModel/definition/relationships.tmdl) |
+| Explicit measures and format strings | [`Measures.tmdl`](powerbi/OperationsKPI.SemanticModel/definition/tables/Measures.tmdl) |
+| Typed, portable sample imports | [`expressions.tmdl`](powerbi/OperationsKPI.SemanticModel/definition/expressions.tmdl) |
+| Dynamic service area access | [`Service Area Manager.tmdl`](powerbi/OperationsKPI.SemanticModel/definition/roles/Service%20Area%20Manager.tmdl) |
+| Report bindings and layout | [`OperationsKPI.Report`](powerbi/OperationsKPI.Report) |
+| KPI regression evidence | [`reference_kpis.py`](scripts/reference_kpis.py) and [`expected-kpis.json`](tests/expected-kpis.json) |
+| Release checks | [`validate_powerbi_assets.py`](scripts/validate_powerbi_assets.py) and [CI](.github/workflows/ci.yml) |
 
-Current quality checks:
+For a short technical review, follow [`docs/reviewer-guide.md`](docs/reviewer-guide.md). The model’s operating assumptions are in [`docs/model-design.md`](docs/model-design.md), and the KPI definitions are in [`docs/kpi-dictionary.md`](docs/kpi-dictionary.md).
 
-- sample data is synthetic;
-- KPI definitions are documented before visuals;
-- DAX measures are separated into reviewable files;
-- JSON theme syntax is validated;
-- source CSV headers and row counts are checked against the model contract;
-- DAX measure definitions are checked against the contract;
-- DAX table column references are checked against the planned table contract;
-- review and limitation documents are checked for key stop language;
-- docs state clearly that no Power BI artefact exists yet;
-- screenshots are prohibited until generated from a real report build.
+## Open In Power BI Desktop
 
-Security posture, Power BI artifact boundaries, and public data rules are documented in [docs/security-posture.md](docs/security-posture.md).
+Power BI Desktop project support and TMDL are preview features, so use a current Windows installation and enable the relevant preview options if prompted.
 
-The next validation step is Power BI Desktop testing of table names, data types, relationships, and DAX syntax.
+1. Open `powerbi/OperationsKPI.pbip`.
+2. Confirm the `GitHubRawBaseUrl` parameter points to the intended branch or fork.
+3. Refresh all queries.
+4. Follow [`docs/desktop-acceptance-test.md`](docs/desktop-acceptance-test.md), including the two RLS identity checks.
+5. Save only after the refresh and expected value reconciliation are clean.
 
-## Where this fits
+The default query parameter reads the public `main` branch through HTTPS. This keeps the project portable and avoids local machine paths. A controlled deployment should replace that source with an approved storage layer and credentials managed outside the project files.
 
-This repo shows the part of Power BI work that is often missing from portfolio examples: defining the model, measures, ownership, target logic, caveats, and refresh responsibilities before arranging visuals.
+## Design References
 
-It is intended to show semantic modelling judgement and reporting governance thinking, not dashboard decoration.
+The implementation follows Microsoft guidance for [Power BI Desktop projects](https://learn.microsoft.com/en-us/power-bi/developer/projects/projects-overview), [TMDL source control](https://learn.microsoft.com/en-us/power-bi/developer/projects/projects-dataset), [PBIR report definitions](https://learn.microsoft.com/en-us/power-bi/developer/projects/projects-report), [star schema design](https://learn.microsoft.com/en-us/power-bi/guidance/star-schema) and [row level security](https://learn.microsoft.com/en-us/power-bi/guidance/rls-guidance).
 
-For portfolio review, this repo is strongest as evidence of BI modelling judgement. It should be paired with a future PBIP/TMDL build before it is described as implementation evidence.
+## Limits
 
-## Limitations
-
-- The repository is currently a semantic model proof and DAX catalogue, not a finished Power BI report.
-- DAX has not been validated in Power BI Desktop.
-- No screenshots or Power BI project artefacts are included.
-- The data is synthetic and simplified.
-- Manual build steps remain before this becomes a working Power BI report.
-
-See `docs/limitations.md` for the full limitation statement.
-
-## Next improvements
-
-1. Build the model in Power BI Desktop from the repository CSV files.
-2. Validate relationships, data types, and DAX measures against the sample rows.
-3. Run Tabular Editor Best Practice Analyzer or equivalent semantic model review.
-4. Save a valid Power BI Project only after it opens and refreshes correctly.
-5. Add screenshots only after they are generated from the actual report.
+The data is synthetic and does not establish production scale, query folding, gateway behaviour, tenant deployment, capacity performance or access enforcement in the Power BI service. The PBIP source passes format and contract checks, but a Windows Desktop run is still needed before this commit can claim rendered output or refresh acceptance. See [`docs/limitations.md`](docs/limitations.md) for the full boundary.

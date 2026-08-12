@@ -1,0 +1,21 @@
+/// Fixed sample settings keep automated results stable across refresh dates.
+table 'Model Settings'
+	isHidden
+
+	column 'As At Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		summarizeBy: none
+		sourceColumn: As At Date
+
+	column 'Due Soon Days'
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: Due Soon Days
+
+	partition 'Model Settings' = m
+		mode: import
+		source = #table(type table [#"As At Date" = date, #"Due Soon Days" = Int64.Type], {{AsAtDate, DueSoonDays}})
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,40 @@
+/// Controlled workflow status.
+table Status
+
+	column status
+		dataType: string
+		isHidden
+		isKey
+		summarizeBy: none
+		sourceColumn: status
+
+	column 'Status Name'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: status_name
+
+	column 'Active Flag'
+		dataType: boolean
+		isHidden
+		summarizeBy: none
+		sourceColumn: active_flag
+
+	column 'Sort Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: sort_order
+
+	partition Status = m
+		mode: import
+		source = ```
+				let
+					Filtered = Table.SelectRows(ReferenceSource, each [reference_type] = "status"),
+					Selected = Table.SelectColumns(Filtered, {"reference_id", "reference_name", "active_flag", "sort_order"}),
+					Renamed = Table.RenameColumns(Selected, {{"reference_id", "status"}, {"reference_name", "status_name"}})
+				in
+					Renamed
+				```
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "b1c2d3e4f50617283940",
+  "position": {
+    "x": 984,
+    "y": 16,
+    "z": 2000,
+    "height": 56,
+    "width": 268,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Service Area"
+                    }
+                  },
+                  "Property": "Service Area"
+                }
+              },
+              "queryRef": "Service Area.Service Area",
+              "nativeQueryRef": "Service Area",
+              "active": true
+            }
+          ]
+        }
+      }
+    }
+  }
+}

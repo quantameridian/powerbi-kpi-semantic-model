@@ -14,5 +14,13 @@ build/
 dist/
 .pytest_cache/
 .ruff_cache/
+node_modules/
+**/bin/
+**/obj/
+**/.pbi/cache.abf
+**/.pbi/localSettings.json
+**/.pbi/unappliedChanges.json
+*.pbix
+*.pbit
 tmp/
 temp/

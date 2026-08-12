@@ -1,0 +1,9 @@
+{
+  "name": "powerbi-kpi-semantic-model-validation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pinned PBIR validation tooling for the Operations KPI Power BI project.",
+  "devDependencies": {
+    "@microsoft/powerbi-report-authoring-cli": "0.1.4"
+  }
+}

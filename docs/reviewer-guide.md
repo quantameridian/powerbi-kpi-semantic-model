@@ -1,62 +1,30 @@
-# Reviewer Guide
+# Technical Review Guide
 
-This guide is for an external reviewer checking whether the repo shows useful Power BI thinking without overstating what exists. It separates semantic model planning evidence from the Power BI Desktop artifact that is still missing.
+This route separates evidence that can be checked in source control from behaviour that still needs Power BI Desktop.
 
-## What To Review First
+## Ten Minute Review
 
-1. [README.md](../README.md) for the repository state and hard limitation.
-2. [powerbi/semantic-model/model-contract.json](../powerbi/semantic-model/model-contract.json) for the planned table, column, relationship, and measure contract.
-3. [docs/kpi-dictionary.md](kpi-dictionary.md) for KPI definitions, owners, caveats, and interpretation rules.
-4. [docs/dax-measures.md](dax-measures.md) and [measures](../measures) for the DAX catalogue.
-5. [docs/rls-and-access-model.md](rls-and-access-model.md) for planned role and access boundaries.
-6. [docs/semantic-model-change-control.md](semantic-model-change-control.md) for model promotion and change gates.
-7. [docs/commercial-review-scorecard.md](commercial-review-scorecard.md) for the plain assessment of the repo.
-8. [docs/semantic-model-review-rubric.md](semantic-model-review-rubric.md) before treating this as an implemented model.
+Start with the model rather than the report layout.
 
-## What This Repository Proves
+1. Open `powerbi/OperationsKPI.SemanticModel/definition/model.tmdl` and confirm that implicit measures are disabled.
+2. Read `relationships.tmdl`. The opened date path is active, while due and closed date paths are inactive.
+3. Inspect `tables/Measures.tmdl`, especially `Closed Items`, `Backlog As At`, `SLA Met Rate` and `Data Readiness Issue Count`.
+4. Inspect the dynamic role in `roles/Service Area Manager.tmdl` and the synthetic mappings in `data/sample-security-access.csv`.
+5. Open the PBIR page folders and check that every visual binds to a real TMDL object.
+6. Read `docs/validation-report.md`, then run `make qa` if the local toolchain is available.
 
-| Skill | Evidence |
-| --- | --- |
-| KPI design | KPI dictionary defines meaning, formula, owner, interpretation, limitation, and quality risk |
-| Semantic modelling | Model contract documents planned facts, dimensions, relationships, and grain |
-| DAX planning | Measures are grouped into core, quality, and trend catalogues for review |
-| BI governance | RLS and access design plus semantic model change control are documented before the build |
-| Governance | Refresh, handover, artifact boundaries, and screenshot rules are explicit |
-| Public repo hygiene | CI, validator, CodeQL, OpenSSF Scorecard, and Power BI security posture docs are present |
+## Questions Worth Asking
 
-## Portfolio Reading
+The important modelling questions are practical ones. Why does a completion measure need to change the active date path? How is a target deemed valid for a closed item? Can the historical backlog be restated from the available fields? What happens when an identity has no access mapping? Which incomplete records are excluded from SLA and which remain visible as assurance warnings?
 
-The strongest evidence is the design path before the Desktop build. Read `docs/kpi-dictionary.md`, then `docs/model-design.md`, the model contract, and the DAX files in `measures/`. The checklist in `docs/powerbi-build-qa-checklist.md` explains what still has to happen before any screenshot or PBIX claim should be trusted. This is valuable BI portfolio evidence, but it is not yet proof that the semantic model runs inside Power BI Desktop.
+The answers are in executable model source and tests, not only in documentation.
 
-## Fast Local Review
+## What Automation Proves
 
-```bash
-make qa
-```
+Microsoft TOM parses the complete TMDL object graph. Microsoft’s PBIR CLI checks report schemas, visual roles, object bindings, theme registration and canvas bounds. Python checks source contracts, reference integrity and the expected KPI values independently of DAX.
 
-Expected result:
+Those checks are meaningful, but they do not run the VertiPaq engine or render Power BI pages. The remaining acceptance work is recorded in `docs/desktop-acceptance-test.md`.
 
-- JSON theme parses;
-- source CSV headers and row counts match the model contract;
-- planned relationships reference known tables and columns;
-- DAX measure names and table column references match the contract;
-- review, limitation, and security documents remain present.
+## Evidence Boundary
 
-## Good Reviewer Questions
-
-- Are KPI denominators and exclusions clear?
-- Does the star schema plan support the management questions?
-- Are target and data readiness behaviours documented?
-- Are the missing PBIP/TMDL/PBIX artifacts clearly acknowledged?
-- What evidence would be required before screenshots should be trusted?
-
-## Current Limitations
-
-- No PBIP, TMDL, PBIR, PBIX, report pages, or screenshots yet.
-- DAX is reviewed as text but not Power BI Desktop validated.
-- Relationship behaviour is planned, not proven in the engine.
-- No Tabular Editor Best Practice Analyzer output yet.
-
-## Strongest Interview Angle
-
-Use this repo to discuss semantic model design, KPI definition, DAX measure planning, access design, and why a serious BI portfolio should not show screenshots until the model has been built and validated.
+No screenshot or deployment claim should be accepted for this version. There is no checked Windows Desktop run, Fabric workspace, gateway, refresh schedule or service role assignment. The source is ready for that acceptance stage; it is not evidence that the stage has happened.

@@ -1,0 +1,40 @@
+/// Work classification used for target and performance analysis.
+table Category
+
+	column category_id
+		dataType: string
+		isHidden
+		isKey
+		summarizeBy: none
+		sourceColumn: category_id
+
+	column 'Category Name'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: category_name
+
+	column 'Active Flag'
+		dataType: boolean
+		isHidden
+		summarizeBy: none
+		sourceColumn: active_flag
+
+	column 'Sort Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: sort_order
+
+	partition Category = m
+		mode: import
+		source = ```
+				let
+					Filtered = Table.SelectRows(ReferenceSource, each [reference_type] = "category"),
+					Selected = Table.SelectColumns(Filtered, {"reference_id", "reference_name", "active_flag", "sort_order"}),
+					Renamed = Table.RenameColumns(Selected, {{"reference_id", "category_id"}, {"reference_name", "category_name"}})
+				in
+					Renamed
+				```
+
+	annotation PBI_ResultType = Table

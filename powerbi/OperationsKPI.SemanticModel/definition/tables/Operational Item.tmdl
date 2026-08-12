@@ -1,0 +1,102 @@
+/// One row per synthetic operational work item.
+table 'Operational Item'
+
+	column item_id
+		dataType: string
+		isHidden
+		isKey
+		summarizeBy: none
+		sourceColumn: item_id
+
+	/// Stable label used on record detail pages.
+	column 'Item Reference'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: item_reference
+
+	column 'Opened Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		summarizeBy: none
+		sourceColumn: opened_date
+
+	column 'Due Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		summarizeBy: none
+		sourceColumn: due_date
+
+	column 'Closed Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		summarizeBy: none
+		sourceColumn: closed_date
+
+	column 'Reporting Period'
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: reporting_period
+
+	column service_area_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: service_area_id
+
+	column owner_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: owner_id
+
+	column category_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: category_id
+
+	column status
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: status
+
+	column priority
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: priority
+
+	column target_key
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: target_key
+
+	column 'Evidence Status'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: evidence_status
+
+	column 'Closure Evidence Link'
+		dataType: string
+		dataCategory: WebUrl
+		summarizeBy: none
+		sourceColumn: closure_evidence_link
+
+	column 'Review Flag'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: review_flag
+
+	column Notes
+		dataType: string
+		summarizeBy: none
+		sourceColumn: notes
+
+	partition 'Operational Item' = m
+		mode: import
+		source = OperationalSource
+
+	annotation PBI_ResultType = Table

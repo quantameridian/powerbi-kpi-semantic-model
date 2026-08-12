@@ -1,0 +1,37 @@
+{
+  "as_at_date": "2026-06-30",
+  "metrics": {
+    "total_items": 32,
+    "open_items": 14,
+    "paused_items": 2,
+    "backlog_items": 16,
+    "closed_items": 15,
+    "overdue_active_items": 14,
+    "due_soon_items": 0,
+    "average_cycle_time_days": 5.4,
+    "closed_items_with_valid_sla_inputs": 13,
+    "sla_met_items": 9,
+    "high_priority_active_items": 6,
+    "high_priority_overdue_items": 6,
+    "missing_owner_count": 3,
+    "missing_due_date_count": 2,
+    "missing_target_count": 0,
+    "target_matched_items": 32,
+    "closed_missing_evidence_count": 3,
+    "review_flag_count": 13,
+    "data_readiness_issue_count": 7,
+    "target_coverage_rate": 1.0,
+    "data_readiness_rate": 0.78125,
+    "sla_met_rate": 0.692308,
+    "sla_target_rate": 0.820769,
+    "sla_variance_to_target": -0.128461
+  },
+  "monthly": [
+    {"period": "2026-01", "opened_items": 5, "closed_items": 3, "backlog_as_at": 2},
+    {"period": "2026-02", "opened_items": 5, "closed_items": 3, "backlog_as_at": 4},
+    {"period": "2026-03", "opened_items": 5, "closed_items": 2, "backlog_as_at": 7},
+    {"period": "2026-04", "opened_items": 5, "closed_items": 3, "backlog_as_at": 9},
+    {"period": "2026-05", "opened_items": 5, "closed_items": 2, "backlog_as_at": 11},
+    {"period": "2026-06", "opened_items": 7, "closed_items": 2, "backlog_as_at": 16}
+  ]
+}

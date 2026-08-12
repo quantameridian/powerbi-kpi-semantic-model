@@ -1,0 +1,89 @@
+/// Conformed calendar used for opened, due, closed, and as at analysis.
+table Date
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: yyyy-mm-dd
+		summarizeBy: none
+		sourceColumn: Date
+
+	column Year
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: Year
+
+	column Quarter
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Quarter
+
+	column 'Month Number'
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: Month Number
+
+	column Month
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Month
+		sortByColumn: 'Month Number'
+
+	column 'Month Start'
+		dataType: dateTime
+		formatString: mmm yyyy
+		summarizeBy: none
+		sourceColumn: Month Start
+
+	column 'Year Month'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Year Month
+		sortByColumn: 'Year Month Sort'
+
+	column 'Year Month Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: Year Month Sort
+
+	hierarchy Calendar
+
+		level Year
+			column: Year
+
+		level Quarter
+			column: Quarter
+
+		level Month
+			column: 'Year Month'
+
+		level Date
+			column: Date
+
+	partition Date = m
+		mode: import
+		source = ```
+				let
+					StartDate = #date(2026, 1, 1),
+					EndDate = AsAtDate,
+					Dates = List.Dates(StartDate, Duration.Days(EndDate - StartDate) + 1, #duration(1, 0, 0, 0)),
+					AsTable = Table.FromList(Dates, Splitter.SplitByNothing(), {"Date"}),
+					Typed = Table.TransformColumnTypes(AsTable, {{"Date", type date}}),
+					WithYear = Table.AddColumn(Typed, "Year", each Date.Year([Date]), Int64.Type),
+					WithQuarter = Table.AddColumn(WithYear, "Quarter", each "Q" & Text.From(Date.QuarterOfYear([Date])), type text),
+					WithMonthNumber = Table.AddColumn(WithQuarter, "Month Number", each Date.Month([Date]), Int64.Type),
+					WithMonth = Table.AddColumn(WithMonthNumber, "Month", each Date.ToText([Date], "MMMM", "en-GB"), type text),
+					WithMonthStart = Table.AddColumn(WithMonth, "Month Start", each Date.StartOfMonth([Date]), type date),
+					WithYearMonth = Table.AddColumn(WithMonthStart, "Year Month", each Date.ToText([Date], "yyyy-MM", "en-GB"), type text),
+					WithSort = Table.AddColumn(WithYearMonth, "Year Month Sort", each [Year] * 100 + [Month Number], Int64.Type)
+				in
+					WithSort
+				```
+
+	annotation PBI_ResultType = Table

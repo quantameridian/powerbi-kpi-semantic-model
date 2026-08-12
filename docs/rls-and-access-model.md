@@ -1,74 +1,31 @@
-# RLS and Access Model
+# Row Level Security And Access
 
-## Purpose
+The model contains one dynamic role named `Service Area Manager`. It filters the hidden `Access Bridge` table to active rows whose synthetic user principal name matches `USERPRINCIPALNAME()`.
 
-This document defines the planned security and access model for the future Power
-BI semantic model. It is a design artifact only. No PBIP, TMDL, PBIX, workspace,
-tenant, gateway, or deployed semantic model currently exists in this repository.
+The bridge relationship permits the security filter to reach `Service Area`. From there, the normal one direction relationship filters operational items. This is the only bidirectional path in the model.
 
-The model should define who can see what before report pages are treated as
-trusted management outputs.
+## Sample Mappings
 
-## Access Principles
+The fixture uses the reserved `.invalid` domain and cannot identify a real account.
 
-- Use role based access rather than individual user logic.
-- Keep row level security logic in the semantic model where possible.
-- Avoid embedding security logic inside visuals.
-- Validate security roles in Power BI Desktop before publication.
-- Document any role that can see all data.
-- Keep tenant IDs, workspace IDs, group IDs, and user principal names out of the public repository.
+| Test identity | Allowed service area | Expected total items | Expected current backlog |
+| --- | --- | ---: | ---: |
+| `manager.sa01@example.invalid` | SA01 | 9 | 5 |
+| `manager.sa02@example.invalid` | SA02 | 9 | 6 |
+| `manager.sa03@example.invalid` | SA03 | 7 | 3 |
+| `manager.sa04@example.invalid` | SA04 | 7 | 2 |
+| `manager.multi@example.invalid` | SA01 and SA03 | 16 | 8 |
 
-## Planned Roles
+An unmapped identity should receive no operational rows. This deny by default result is part of the Desktop acceptance test.
 
-| Role | Intended audience | Planned data access | Review risk |
-| --- | --- | --- | --- |
-| Executive reviewer | Senior management reviewing aggregate service performance | All service areas at aggregate and drillthrough level | Broad access must be explicitly approved |
-| Service area manager | Manager responsible for one or more service areas | Filtered to assigned service area IDs | Mapping table must be correct and current |
-| Team owner | Owner responsible for a specific operational team or owner group | Filtered to assigned owner IDs or team IDs | Blank owner values must remain visible to assurance |
-| Assurance reviewer | Reporting assurance or quality reviewer | All rows, with quality and caveat measures visible | Must not hide failed data readiness records |
-| Report consumer | General reporting user | Aggregate pages only, no sensitive detail pages | Requires separate report/page permission design |
+## Deployment Responsibilities
 
-## Planned Security Tables
+The public fixture demonstrates model logic, not service membership. A deployment must replace the sample identities with an approved entitlement source, assign Microsoft Entra security groups to the semantic model role and keep consumers on permissions that allow RLS to be enforced.
 
-The current sample data does not include a security bridge table. A real PBIP
-build should add a table similar to:
+Workspace administrators, members and contributors can have permissions that make RLS behave differently from a view only consumer. Role testing therefore needs both Desktop simulation and a service test account with the intended workspace and semantic model permissions.
 
-| Field | Purpose |
-| --- | --- |
-| `role_name` | Semantic model role or audience group |
-| `security_scope_type` | Service area, owner, team, all, or aggregate only |
-| `security_scope_id` | Key value that maps to the relevant dimension |
-| `active_from` | Effective date for the access rule |
-| `active_to` | End date for retired access |
-| `approved_by_role` | Role accountable for approving access |
+The access owner should review dormant grants, duplicate mappings and leavers. The BI owner should monitor whether changes to relationships create an unintended path around the secured dimension.
 
-The bridge table must use synthetic values in this public repo unless a real
-private implementation is being handled outside GitHub.
+## Known Boundary
 
-## RLS Validation Checklist
-
-Before this repo can claim implemented RLS:
-
-1. Build a real Power BI Desktop model from the sample CSV files.
-2. Add a security bridge table with synthetic values.
-3. Create roles in Power BI Desktop.
-4. Test each role using "View as" or equivalent role validation.
-5. Confirm blank owners and data quality failures are not hidden from assurance roles.
-6. Document any role that can see all data and its approval route.
-7. Reopen and refresh the PBIP from a clean checkout.
-8. Add screenshots only after the validated artifact exists.
-
-## Hard Stop Conditions
-
-Do not claim RLS is implemented if:
-
-- role definitions exist only in this document;
-- no Power BI Desktop role validation has been performed;
-- security mapping uses personal emails, tenant IDs, or private group IDs;
-- blank or failed quality records disappear from assurance views;
-- screenshots are not generated from the current committed model.
-
-## Current Verdict
-
-The repository currently shows RLS and access design thinking. It does not yet
-prove implemented Power BI row level security.
+TOM confirms that the role and security relationship are valid model objects. It does not evaluate identities. The role has not been simulated in Power BI Desktop or assigned in a Fabric workspace for this commit.

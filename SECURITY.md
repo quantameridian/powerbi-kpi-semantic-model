@@ -1,27 +1,17 @@
 # Security Policy
 
-## Supported scope
+## Reporting A Vulnerability
 
-This is a public portfolio project using synthetic data and source-controlled
-Power BI planning assets. It is not a production semantic model and must not be
-used with real client, customer, employee, or protected operational data without
-a separate security review.
+Do not open a public issue for suspected secret exposure, unsafe report access or a vulnerable dependency. Use GitHub private vulnerability reporting when it is available, or contact the repository owner through the GitHub profile.
 
-## Reporting a vulnerability
+Include the affected file or workflow, a safe reproduction, the likely impact and any proposed remediation. Do not attach real credentials or confidential data to the report.
 
-Please do not open a public issue for suspected vulnerabilities or accidental
-secret exposure. Use GitHub private vulnerability reporting if enabled, or
-contact the repository owner through the GitHub profile.
+## Supported Scope
 
-Include:
+The maintained scope is the current default branch. This repository is a synthetic example and is not approved for client, employee or protected data.
 
-- affected file, measure, model specification, or workflow;
-- reproduction steps;
-- potential impact;
-- any safe remediation suggestion.
+## Data And Credential Boundary
 
-## Data handling
+Never commit real report exports, cached semantic model data, tokens, service principal details, tenant or workspace identifiers, gateway configuration, private source URLs or internal screenshots. A deployment must manage those values outside versioned PBIP source.
 
-Only synthetic sample data should be committed. Do not submit real report
-exports, PBIX/PBIP files containing sensitive metadata, credentials, service
-principal details, workspace IDs, gateway details, or internal screenshots.
+The implemented controls and residual risks are described in `docs/security-posture.md`.
