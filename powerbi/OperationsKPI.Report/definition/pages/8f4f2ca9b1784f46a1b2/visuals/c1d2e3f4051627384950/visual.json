@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "c1d2e3f4051627384950",
+  "position": {
+    "x": 24,
+    "y": 88,
+    "z": 3000,
+    "height": 120,
+    "width": 1228,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Measures"
+                    }
+                  },
+                  "Property": "Open Items"
+                }
+              },
+              "queryRef": "Measures.Open Items",
+              "nativeQueryRef": "Open Items"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Measures"
+                    }
+                  },
+                  "Property": "Backlog Items"
+                }
+              },
+              "queryRef": "Measures.Backlog Items",
+              "nativeQueryRef": "Backlog Items"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Measures"
+                    }
+                  },
+                  "Property": "Overdue Active Items"
+                }
+              },
+              "queryRef": "Measures.Overdue Active Items",
+              "nativeQueryRef": "Overdue Active Items"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Measures"
+                    }
+                  },
+                  "Property": "SLA Met Rate"
+                }
+              },
+              "queryRef": "Measures.SLA Met Rate",
+              "nativeQueryRef": "SLA Met Rate"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    }
+  }
+}

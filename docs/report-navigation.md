@@ -1,85 +1,21 @@
-# Report Navigation
+# Report Pages
 
-## Purpose
+The PBIR report has two pages. Both are bound directly to objects in the local TMDL model.
 
-This document defines the planned report navigation for the Power BI KPI semantic model project. It is a build plan only. No report pages, screenshots, PBIP files, or PBIR files are claimed to exist yet.
+## Executive Summary
 
-The report should demonstrate how a reviewer would move from management-level KPI status to the underlying operational records and data quality context.
+The first page opens with one service area slicer and a four value card for open items, current backlog, overdue active work and SLA met rate. A monthly line chart compares reconstructed backlog with completed work. The right side shows overdue work by service area and a compact item table.
 
-## Navigation principles
+The page is meant for a service review, not detailed investigation. It makes the current pressure visible, then gives enough period and service context to decide where the next question belongs.
 
-- Start with the management questions, not the visuals.
-- Keep the page set small enough for review and handover.
-- Make KPI definitions traceable to the semantic model and DAX measures.
-- Separate performance interpretation from data quality checks.
-- Do not add screenshots until they are generated from the actual report.
+## Assurance Detail
 
-## Planned page structure
+The second page puts data readiness beside the record context. Its four value card shows missing owners, missing due dates, closed work without evidence and the overall readiness rate. A service area chart shows where issue records sit, while the table exposes the dimensions and source flags needed to investigate them.
 
-| Page | Purpose | Primary audience | Planned content |
-| --- | --- | --- | --- |
-| 1. Executive Summary | Show current KPI status and exceptions requiring attention | Senior reviewer or service lead | KPI cards, target variance, key trend, open exception count, data quality warning |
-| 2. Operational Performance | Explain service volume, timeliness, backlog, and throughput | Operational manager or analyst | trend chart, service/team breakdown, backlog profile, SLA or timeliness measure |
-| 3. KPI Detail | Show how each KPI is calculated and segmented | Analyst or report owner | KPI table, period comparison, target comparison, filterable service/team view |
-| 4. Data Quality and Assurance | Show whether the report data is ready for use | Report owner or assurance lead | missing owner count, invalid status count, stale records, records missing evidence |
-| 5. Exception Detail | Provide row-level review support | Analyst or action owner | record table with owner, status, risk, due date, review date, evidence flag, issue type |
+The page does not imply that a low readiness rate is poor service performance. It is a warning about how much confidence should be placed in the performance result.
 
-## Planned report flow
+## Interaction
 
-```mermaid
-flowchart LR
-    A["Executive Summary"] --> B["Operational Performance"]
-    A --> C["Data Quality and Assurance"]
-    B --> D["KPI Detail"]
-    C --> E["Exception Detail"]
-    D --> E
-```
+The service area slicer on the first page filters all business visuals through the `Service Area` dimension. Report users can use the normal page tabs to move to assurance detail. No hidden navigation page, bookmark state or custom visual is required.
 
-## Page design notes
-
-### Executive Summary
-
-The first page should answer:
-
-- Are key KPIs above or below target?
-- Which KPI needs attention first?
-- Is the underlying data quality acceptable for reporting?
-- Are any high-risk exceptions unresolved?
-
-The page should avoid dense diagnostic detail. It should direct the reviewer to the relevant detail page.
-
-### Operational Performance
-
-This page should show operational movement over time and explain whether changes are driven by volume, timeliness, backlog, or service mix. It should use a small number of visuals with clear axis titles and consistent filters.
-
-### KPI Detail
-
-This page should make KPI logic visible. It should support checking a KPI by period, service area, and team. It should connect to `docs/kpi-dictionary.md` and the measure files in `measures/`.
-
-### Data Quality and Assurance
-
-This page should make reporting risk visible. It should show where data quality issues may affect interpretation, especially missing owners, missing evidence, invalid statuses, and stale records.
-
-### Exception Detail
-
-This page should support follow-up action. It should prioritise rows by risk, due date, and quality issue type.
-
-## Navigation controls to build manually
-
-When the report is created in Power BI Desktop:
-
-- Add a page navigator or consistent left-side navigation.
-- Use page names that match this document.
-- Keep slicers consistent across pages where possible.
-- Add drill-through only if it helps move from KPI summary to exception detail.
-- Avoid hidden pages unless they are clearly documented.
-
-## Screenshot policy
-
-Screenshots should only be added to `powerbi/screenshots/` after:
-
-- the report has been created in Power BI Desktop;
-- visuals use the sample data in this repository;
-- the screenshots match the current report build;
-- the README and this document describe the same page structure.
-
+Rendered behaviour remains part of `desktop-acceptance-test.md`; PBIR validation confirms structure and bindings but cannot replace a visual check.

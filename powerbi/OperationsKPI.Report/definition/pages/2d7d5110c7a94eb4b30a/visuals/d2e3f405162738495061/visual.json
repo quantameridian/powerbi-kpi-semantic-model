@@ -1,0 +1,165 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "d2e3f405162738495061",
+  "position": {
+    "x": 544,
+    "y": 228,
+    "z": 4000,
+    "height": 464,
+    "width": 708,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Operational Item"
+                    }
+                  },
+                  "Property": "Item Reference"
+                }
+              },
+              "queryRef": "Operational Item.Item Reference",
+              "nativeQueryRef": "Item Reference"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Service Area"
+                    }
+                  },
+                  "Property": "Service Area"
+                }
+              },
+              "queryRef": "Service Area.Service Area",
+              "nativeQueryRef": "Service Area"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Owner"
+                    }
+                  },
+                  "Property": "Owner Name"
+                }
+              },
+              "queryRef": "Owner.Owner Name",
+              "nativeQueryRef": "Owner Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Category"
+                    }
+                  },
+                  "Property": "Category Name"
+                }
+              },
+              "queryRef": "Category.Category Name",
+              "nativeQueryRef": "Category Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Status"
+                    }
+                  },
+                  "Property": "Status Name"
+                }
+              },
+              "queryRef": "Status.Status Name",
+              "nativeQueryRef": "Status Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Operational Item"
+                    }
+                  },
+                  "Property": "Evidence Status"
+                }
+              },
+              "queryRef": "Operational Item.Evidence Status",
+              "nativeQueryRef": "Evidence Status"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Operational Item"
+                    }
+                  },
+                  "Property": "Review Flag"
+                }
+              },
+              "queryRef": "Operational Item.Review Flag",
+              "nativeQueryRef": "Review Flag"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "columnAdjustment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'growToFit'"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Record assurance context'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,108 @@
+/// Public raw-content root used by every sample query. Override this parameter to test a branch or fork.
+expression GitHubRawBaseUrl = "https://raw.githubusercontent.com/quantameridian/powerbi-kpi-semantic-model/main/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+
+	annotation PBI_ResultType = Text
+
+/// Fixed reporting date for deterministic sample results.
+expression AsAtDate = #date(2026, 6, 30) meta [IsParameterQuery=true, Type="Date", IsParameterQueryRequired=true]
+
+	annotation PBI_ResultType = Date
+
+/// Forward review window in calendar days.
+expression DueSoonDays = 7 meta [IsParameterQuery=true, Type="Number", IsParameterQueryRequired=true]
+
+	annotation PBI_ResultType = Number
+
+expression OperationalSource = ```
+		let
+			Source = Csv.Document(
+				Web.Contents(GitHubRawBaseUrl, [RelativePath = "data/sample-operational-data.csv"]),
+				[Delimiter = ",", Columns = 16, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]
+			),
+			PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+			EmptyToNull = Table.ReplaceValue(PromotedHeaders, "", null, Replacer.ReplaceValue, Table.ColumnNames(PromotedHeaders)),
+			Typed = Table.TransformColumnTypes(
+				EmptyToNull,
+				{
+					{"item_id", type text}, {"item_reference", type text},
+					{"opened_date", type date}, {"due_date", type date}, {"closed_date", type date},
+					{"reporting_period", type text}, {"service_area_id", type text}, {"owner_id", type text},
+					{"category_id", type text}, {"status", type text}, {"priority", type text},
+					{"target_key", type text}, {"evidence_status", type text},
+					{"closure_evidence_link", type text}, {"review_flag", type text}, {"notes", type text}
+				},
+				"en-GB"
+			)
+		in
+			Typed
+		```
+
+	annotation PBI_ResultType = Table
+
+expression TargetSource = ```
+		let
+			Source = Csv.Document(
+				Web.Contents(GitHubRawBaseUrl, [RelativePath = "data/sample-targets.csv"]),
+				[Delimiter = ",", Columns = 10, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]
+			),
+			PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+			EmptyToNull = Table.ReplaceValue(PromotedHeaders, "", null, Replacer.ReplaceValue, Table.ColumnNames(PromotedHeaders)),
+			Typed = Table.TransformColumnTypes(
+				EmptyToNull,
+				{
+					{"target_key", type text}, {"target_id", type text}, {"category_id", type text},
+					{"priority", type text}, {"target_days", Int64.Type}, {"target_met_rate", type number},
+					{"effective_from", type date}, {"effective_to", type date},
+					{"target_owner_role", type text}, {"notes", type text}
+				},
+				"en-GB"
+			)
+		in
+			Typed
+		```
+
+	annotation PBI_ResultType = Table
+
+expression ReferenceSource = ```
+		let
+			Source = Csv.Document(
+				Web.Contents(GitHubRawBaseUrl, [RelativePath = "data/sample-reference-data.csv"]),
+				[Delimiter = ",", Columns = 7, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]
+			),
+			PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+			EmptyToNull = Table.ReplaceValue(PromotedHeaders, "", null, Replacer.ReplaceValue, Table.ColumnNames(PromotedHeaders)),
+			Typed = Table.TransformColumnTypes(
+				EmptyToNull,
+				{
+					{"reference_type", type text}, {"reference_id", type text}, {"reference_name", type text},
+					{"parent_reference_id", type text}, {"active_flag", type logical},
+					{"sort_order", Int64.Type}, {"notes", type text}
+				},
+				"en-GB"
+			)
+		in
+			Typed
+		```
+
+	annotation PBI_ResultType = Table
+
+expression AccessSource = ```
+		let
+			Source = Csv.Document(
+				Web.Contents(GitHubRawBaseUrl, [RelativePath = "data/sample-security-access.csv"]),
+				[Delimiter = ",", Columns = 4, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]
+			),
+			PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+			Typed = Table.TransformColumnTypes(
+				PromotedHeaders,
+				{
+					{"user_principal_name", type text}, {"service_area_id", type text},
+					{"access_role", type text}, {"active_flag", type logical}
+				},
+				"en-GB"
+			)
+		in
+			Typed
+		```
+
+	annotation PBI_ResultType = Table

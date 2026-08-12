@@ -1,0 +1,123 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "f1021324354657687980",
+  "position": {
+    "x": 804,
+    "y": 468,
+    "z": 6000,
+    "height": 224,
+    "width": 448,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Operational Item"
+                    }
+                  },
+                  "Property": "Item Reference"
+                }
+              },
+              "queryRef": "Operational Item.Item Reference",
+              "nativeQueryRef": "Item Reference"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Owner"
+                    }
+                  },
+                  "Property": "Owner Name"
+                }
+              },
+              "queryRef": "Owner.Owner Name",
+              "nativeQueryRef": "Owner Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Priority"
+                    }
+                  },
+                  "Property": "Priority Name"
+                }
+              },
+              "queryRef": "Priority.Priority Name",
+              "nativeQueryRef": "Priority Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Operational Item"
+                    }
+                  },
+                  "Property": "Due Date"
+                }
+              },
+              "queryRef": "Operational Item.Due Date",
+              "nativeQueryRef": "Due Date"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "columnAdjustment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'growToFit'"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Item detail'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

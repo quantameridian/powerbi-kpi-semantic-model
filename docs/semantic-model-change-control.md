@@ -1,66 +1,23 @@
 # Semantic Model Change Control
 
-## Purpose
+A model change is ready when another person can understand why the result changed, inspect the source difference and repeat the acceptance checks.
 
-This document defines how KPI, model, DAX, relationship, and report navigation
-changes should be controlled once a real Power BI artifact exists.
+## Assess The Change
 
-The repo currently contains a validated model plan and DAX catalogue. It does
-not contain a PBIP, TMDL, PBIX, or deployed semantic model.
+Changes to wording or layout usually affect PBIR only. Changes to a measure, relationship, table grain, source type, target rule or access path affect the semantic contract. A measure rename affects both TMDL and every PBIR binding that references it.
 
-## Change Types
+Before editing, record the business reason, affected measures and whether history should be restated. If the denominator or target interpretation changes, the KPI owner should approve it before implementation.
 
-| Change type | Example | Required review |
-| --- | --- | --- |
-| KPI definition | Change SLA denominator or exclusion rule | KPI owner and reporting lead |
-| DAX measure | Rewrite `[SLA Met Rate]` logic | BI owner and KPI owner |
-| Relationship | Change filter direction or active date path | BI owner and model reviewer |
-| Source field | Rename or remove source CSV column | Data owner and BI owner |
-| Target logic | Change target threshold or effective date | KPI owner and service owner |
-| RLS/access | Add role or change security bridge mapping | Access approver and assurance reviewer |
-| Report navigation | Add page, remove page, or change drillthrough route | Reporting owner |
+## Build And Review
 
-## Review Gates
+Make the smallest coherent source change. Update `contracts/model-contract.json`, the KPI dictionary and expected result snapshot when their meaning changes. Run `make qa`; the report binding check will catch renamed or missing model objects.
 
-| Gate | Evidence required |
-| --- | --- |
-| Design review | Change reason, affected KPIs, affected tables, owner approval |
-| Build review | PBIP/TMDL or model artifact updated and reopened successfully |
-| Measure review | DAX evaluates in Power BI Desktop and matches KPI dictionary |
-| Security review | RLS/access impact reviewed where applicable |
-| Regression review | Existing headline values compared before and after change |
-| Publication review | README, screenshots, and limitations updated after validation |
+For a result changing update, compare the old and new expected values and explain each movement. A passing test that merely accepts an unexplained new number is not useful evidence.
 
-## Change Record Fields
+RLS changes need an allowed identity, a multi area identity and an unmapped identity test. Relationship changes need a path review for ambiguity and filter direction. Source changes need a clean refresh rather than a refresh that depends on an existing local cache.
 
-| Field | Purpose |
-| --- | --- |
-| Change ID | Stable reference for review and handover |
-| Requested by | Role or forum requesting the change |
-| Change type | KPI, DAX, relationship, source, target, RLS, report, or documentation |
-| Description | Plain language explanation |
-| Business reason | Why the change is needed |
-| Affected artifacts | Measures, tables, pages, screenshots, docs, or contracts |
-| Approval owner | Role accountable for accepting the change |
-| Implementation owner | Role accountable for making the change |
-| Test evidence | Desktop refresh, DAX validation, role test, or repository validation |
-| Effective date | Reporting period where the change applies |
-| Restatement decision | Whether historic results are restated or marked not comparable |
+## Promote Or Roll Back
 
-## Promotion Model
+Only an accepted commit should be deployed. Keep environment identifiers and credentials outside the project. If the Desktop or service result differs from the reviewed source, stop promotion and return to the last accepted commit.
 
-```mermaid
-flowchart LR
-    A["Change request"] --> B["Design review"]
-    B --> C["Build in Power BI Desktop"]
-    C --> D["Validate measures and relationships"]
-    D --> E["Security and RLS review"]
-    E --> F["Refresh from clean checkout"]
-    F --> G["Update docs and screenshots"]
-    G --> H["Ready for reviewer"]
-```
-
-## Current Limitation
-
-This repo can validate documentation, CSV shapes, JSON, and DAX references. It
-cannot validate Power BI Desktop behavior until a real model artifact is added.
+Where a change alters published history, retain the previous result, the new result, the effective period and the approval decision. That record is more important than a generic version number because it explains what report users experienced.

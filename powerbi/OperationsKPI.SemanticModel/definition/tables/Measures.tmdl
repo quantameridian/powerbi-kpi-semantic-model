@@ -1,0 +1,358 @@
+/// Explicit business measures. Implicit aggregation is disabled for the model.
+table Measures
+
+	/// Distinct work items in the current opened date and dimension context.
+	measure 'Total Items' = DISTINCTCOUNT('Operational Item'[item_id])
+		formatString: #,##0
+		displayFolder: Workload
+
+	/// Active work at the fixed report date. Date slicers do not change this current state count.
+	measure 'Open Items' = ```
+			CALCULATE(
+				[Total Items],
+				REMOVEFILTERS('Date'),
+				'Operational Item'[status] IN {"Open", "In Progress"}
+			)
+			```
+		formatString: #,##0
+		displayFolder: Workload
+
+	/// Paused work at the fixed report date.
+	measure 'Paused Items' = ```
+			CALCULATE(
+				[Total Items],
+				REMOVEFILTERS('Date'),
+				'Operational Item'[status] = "Paused"
+			)
+			```
+		formatString: #,##0
+		displayFolder: Workload
+
+	/// Current unresolved queue, including paused items.
+	measure 'Backlog Items' = ```
+			CALCULATE(
+				[Total Items],
+				REMOVEFILTERS('Date'),
+				'Operational Item'[status] IN {"Open", "In Progress", "Paused"}
+			)
+			```
+		formatString: #,##0
+		displayFolder: Workload
+
+	/// Work opened in the current date context.
+	measure 'Opened Items' = [Total Items]
+		formatString: #,##0
+		displayFolder: Flow
+
+	/// Work closed in the current date context, using the inactive closed date relationship.
+	measure 'Closed Items' = ```
+			CALCULATE(
+				[Total Items],
+				'Operational Item'[status] = "Closed",
+				USERELATIONSHIP('Operational Item'[Closed Date], 'Date'[Date]),
+				CROSSFILTER('Operational Item'[Opened Date], 'Date'[Date], NONE)
+			)
+			```
+		formatString: #,##0
+		displayFolder: Flow
+
+	/// Reconstructed unresolved queue at the last date in the current date context.
+	measure 'Backlog As At' = ```
+			VAR CutoffDate = MAX('Date'[Date])
+			RETURN
+				CALCULATE(
+					[Total Items],
+					REMOVEFILTERS('Date'),
+					FILTER(
+						'Operational Item',
+						'Operational Item'[Opened Date] <= CutoffDate
+							&& 'Operational Item'[status] <> "Cancelled"
+							&& (
+								'Operational Item'[Closed Date] > CutoffDate
+									|| (ISBLANK('Operational Item'[Closed Date]) && 'Operational Item'[status] <> "Closed")
+							)
+					)
+				)
+			```
+		formatString: #,##0
+		displayFolder: Workload
+
+	/// Fixed sample reporting date held in Model Settings.
+	measure 'Report Date' = MAX('Model Settings'[As At Date])
+		formatString: yyyy-mm-dd
+		displayFolder: Context
+
+	/// Active work past its due date at the fixed report date.
+	measure 'Overdue Active Items' = ```
+			VAR CutoffDate = [Report Date]
+			RETURN
+				CALCULATE(
+					[Total Items],
+					REMOVEFILTERS('Date'),
+					FILTER(
+						'Operational Item',
+						'Operational Item'[status] IN {"Open", "In Progress"}
+							&& NOT ISBLANK('Operational Item'[Due Date])
+							&& 'Operational Item'[Due Date] < CutoffDate
+					)
+				)
+			```
+		formatString: #,##0
+		displayFolder: Timeliness
+
+	/// Active work due in the configured forward review window.
+	measure 'Due Soon Items' = ```
+			VAR CutoffDate = [Report Date]
+			VAR WindowDays = MAX('Model Settings'[Due Soon Days])
+			RETURN
+				CALCULATE(
+					[Total Items],
+					REMOVEFILTERS('Date'),
+					FILTER(
+						'Operational Item',
+						'Operational Item'[status] IN {"Open", "In Progress"}
+							&& NOT ISBLANK('Operational Item'[Due Date])
+							&& 'Operational Item'[Due Date] >= CutoffDate
+							&& 'Operational Item'[Due Date] <= CutoffDate + WindowDays
+					)
+				)
+			```
+		formatString: #,##0
+		displayFolder: Timeliness
+
+	/// Average calendar days from opening to closure for valid closed records.
+	measure 'Average Cycle Time Days' = ```
+			CALCULATE(
+				AVERAGEX(
+					FILTER(
+						'Operational Item',
+						'Operational Item'[status] = "Closed"
+							&& NOT ISBLANK('Operational Item'[Opened Date])
+							&& NOT ISBLANK('Operational Item'[Closed Date])
+					),
+					DATEDIFF('Operational Item'[Opened Date], 'Operational Item'[Closed Date], DAY)
+				),
+				USERELATIONSHIP('Operational Item'[Closed Date], 'Date'[Date]),
+				CROSSFILTER('Operational Item'[Opened Date], 'Date'[Date], NONE)
+			)
+			```
+		formatString: 0.0
+		displayFolder: Timeliness
+
+	/// Closed records with dates and a target effective on the opened date.
+	measure 'Closed Items With Valid SLA Inputs' = ```
+			CALCULATE(
+				COUNTROWS(
+					FILTER(
+						'Operational Item',
+						'Operational Item'[status] = "Closed"
+							&& NOT ISBLANK('Operational Item'[Due Date])
+							&& NOT ISBLANK('Operational Item'[Closed Date])
+							&& NOT ISBLANK(RELATED(Target[Target ID]))
+							&& 'Operational Item'[Opened Date] >= RELATED(Target[Effective From])
+							&& 'Operational Item'[Opened Date] <= RELATED(Target[Effective To])
+					)
+				),
+				USERELATIONSHIP('Operational Item'[Closed Date], 'Date'[Date]),
+				CROSSFILTER('Operational Item'[Opened Date], 'Date'[Date], NONE)
+			)
+			```
+		formatString: #,##0
+		displayFolder: SLA
+
+	/// Valid closed records completed on or before the recorded due date.
+	measure 'SLA Met Items' = ```
+			CALCULATE(
+				COUNTROWS(
+					FILTER(
+						'Operational Item',
+						'Operational Item'[status] = "Closed"
+							&& NOT ISBLANK('Operational Item'[Due Date])
+							&& NOT ISBLANK('Operational Item'[Closed Date])
+							&& NOT ISBLANK(RELATED(Target[Target ID]))
+							&& 'Operational Item'[Opened Date] >= RELATED(Target[Effective From])
+							&& 'Operational Item'[Opened Date] <= RELATED(Target[Effective To])
+							&& 'Operational Item'[Closed Date] <= 'Operational Item'[Due Date]
+					)
+				),
+				USERELATIONSHIP('Operational Item'[Closed Date], 'Date'[Date]),
+				CROSSFILTER('Operational Item'[Opened Date], 'Date'[Date], NONE)
+			)
+			```
+		formatString: #,##0
+		displayFolder: SLA
+
+	measure 'SLA Met Rate' = DIVIDE([SLA Met Items], [Closed Items With Valid SLA Inputs])
+		formatString: 0.0%
+		displayFolder: SLA
+
+	/// Weighted target rate across valid closed records in context.
+	measure 'SLA Target Rate' = ```
+			CALCULATE(
+				AVERAGEX(
+					FILTER(
+						'Operational Item',
+						'Operational Item'[status] = "Closed"
+							&& NOT ISBLANK('Operational Item'[Due Date])
+							&& NOT ISBLANK('Operational Item'[Closed Date])
+							&& NOT ISBLANK(RELATED(Target[Target Met Rate]))
+							&& 'Operational Item'[Opened Date] >= RELATED(Target[Effective From])
+							&& 'Operational Item'[Opened Date] <= RELATED(Target[Effective To])
+					),
+					RELATED(Target[Target Met Rate])
+				),
+				USERELATIONSHIP('Operational Item'[Closed Date], 'Date'[Date]),
+				CROSSFILTER('Operational Item'[Opened Date], 'Date'[Date], NONE)
+			)
+			```
+		formatString: 0.0%
+		displayFolder: SLA
+
+	measure 'SLA Variance To Target' = [SLA Met Rate] - [SLA Target Rate]
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: SLA
+
+	measure 'Target Matched Items' = ```
+			COUNTROWS(
+				FILTER('Operational Item', NOT ISBLANK(RELATED(Target[Target ID])))
+			)
+			```
+		formatString: #,##0
+		displayFolder: Data Quality
+
+	measure 'Target Coverage Rate' = DIVIDE([Target Matched Items], [Total Items])
+		formatString: 0.0%
+		displayFolder: Data Quality
+
+	measure 'Missing Owner Count' = ```
+			CALCULATE([Total Items], ISBLANK('Operational Item'[owner_id]))
+			```
+		formatString: #,##0
+		displayFolder: Data Quality
+
+	measure 'Missing Due Date Count' = ```
+			CALCULATE([Total Items], ISBLANK('Operational Item'[Due Date]))
+			```
+		formatString: #,##0
+		displayFolder: Data Quality
+
+	measure 'Missing Target Count' = ```
+			COUNTROWS(
+				FILTER('Operational Item', ISBLANK(RELATED(Target[Target ID])))
+			)
+			```
+		formatString: #,##0
+		displayFolder: Data Quality
+
+	measure 'Closed Missing Evidence Count' = ```
+			CALCULATE(
+				COUNTROWS(
+					FILTER(
+						'Operational Item',
+						'Operational Item'[status] = "Closed"
+							&& (
+								'Operational Item'[Evidence Status] = "Missing"
+									|| (
+										'Operational Item'[Evidence Status] <> "Not required"
+											&& ISBLANK('Operational Item'[Closure Evidence Link])
+									)
+							)
+					)
+				),
+				USERELATIONSHIP('Operational Item'[Closed Date], 'Date'[Date]),
+				CROSSFILTER('Operational Item'[Opened Date], 'Date'[Date], NONE)
+			)
+			```
+		formatString: #,##0
+		displayFolder: Data Quality
+
+	/// Distinct records with at least one material readiness issue.
+	measure 'Data Readiness Issue Count' = ```
+			COUNTROWS(
+				FILTER(
+					'Operational Item',
+					ISBLANK('Operational Item'[owner_id])
+						|| ISBLANK('Operational Item'[Due Date])
+						|| ISBLANK(RELATED(Target[Target ID]))
+						|| (
+							'Operational Item'[status] = "Closed"
+								&& (
+									'Operational Item'[Evidence Status] = "Missing"
+										|| (
+											'Operational Item'[Evidence Status] <> "Not required"
+												&& ISBLANK('Operational Item'[Closure Evidence Link])
+										)
+								)
+						)
+				)
+			)
+			```
+		formatString: #,##0
+		displayFolder: Data Quality
+
+	measure 'Data Readiness Rate' = 1 - DIVIDE([Data Readiness Issue Count], [Total Items])
+		formatString: 0.0%
+		displayFolder: Data Quality
+
+	measure 'Review Flag Count' = ```
+			CALCULATE([Total Items], 'Operational Item'[Review Flag] = "Yes")
+			```
+		formatString: #,##0
+		displayFolder: Assurance
+
+	measure 'High Priority Active Items' = ```
+			CALCULATE(
+				[Total Items],
+				REMOVEFILTERS('Date'),
+				'Operational Item'[status] IN {"Open", "In Progress"},
+				'Operational Item'[priority] IN {"High", "Critical"}
+			)
+			```
+		formatString: #,##0
+		displayFolder: Assurance
+
+	measure 'High Priority Overdue Items' = ```
+			VAR CutoffDate = [Report Date]
+			RETURN
+				CALCULATE(
+					[Total Items],
+					REMOVEFILTERS('Date'),
+					FILTER(
+						'Operational Item',
+						'Operational Item'[status] IN {"Open", "In Progress"}
+							&& 'Operational Item'[priority] IN {"High", "Critical"}
+							&& NOT ISBLANK('Operational Item'[Due Date])
+							&& 'Operational Item'[Due Date] < CutoffDate
+					)
+				)
+			```
+		formatString: #,##0
+		displayFolder: Assurance
+
+	measure 'Backlog As At Previous Month' = CALCULATE([Backlog As At], DATEADD('Date'[Date], -1, MONTH))
+		formatString: #,##0
+		displayFolder: Period Comparison
+
+	measure 'Month on Month Backlog Change' = [Backlog As At] - [Backlog As At Previous Month]
+		formatString: +#,##0;-#,##0;0
+		displayFolder: Period Comparison
+
+	measure 'Closed Items Previous Month' = CALCULATE([Closed Items], DATEADD('Date'[Date], -1, MONTH))
+		formatString: #,##0
+		displayFolder: Period Comparison
+
+	measure 'Month on Month Closed Change' = [Closed Items] - [Closed Items Previous Month]
+		formatString: +#,##0;-#,##0;0
+		displayFolder: Period Comparison
+
+	column Value
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: Value
+
+	partition Measures = m
+		mode: import
+		source = #table(type table [Value = text], {{"Measures"}})
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,8 @@
+/// Dynamic sample role. Unmapped identities receive no service area rows.
+role 'Service Area Manager'
+	modelPermission: read
+
+	tablePermission 'Access Bridge' = ```
+			'Access Bridge'[Active Flag]
+				&& LOWER('Access Bridge'[User Principal Name]) = LOWER(USERPRINCIPALNAME())
+			```

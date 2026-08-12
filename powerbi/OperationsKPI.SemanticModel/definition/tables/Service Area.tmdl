@@ -1,0 +1,40 @@
+/// Organisational service area used for reporting and access control.
+table 'Service Area'
+
+	column service_area_id
+		dataType: string
+		isHidden
+		isKey
+		summarizeBy: none
+		sourceColumn: service_area_id
+
+	column 'Service Area'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: service_area_name
+
+	column 'Active Flag'
+		dataType: boolean
+		isHidden
+		summarizeBy: none
+		sourceColumn: active_flag
+
+	column 'Sort Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: sort_order
+
+	partition 'Service Area' = m
+		mode: import
+		source = ```
+				let
+					Filtered = Table.SelectRows(ReferenceSource, each [reference_type] = "service_area"),
+					Selected = Table.SelectColumns(Filtered, {"reference_id", "reference_name", "active_flag", "sort_order"}),
+					Renamed = Table.RenameColumns(Selected, {{"reference_id", "service_area_id"}, {"reference_name", "service_area_name"}})
+				in
+					Renamed
+				```
+
+	annotation PBI_ResultType = Table

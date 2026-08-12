@@ -1,0 +1,66 @@
+/// Service targets by category and priority, with an effective date range.
+table Target
+
+	column target_key
+		dataType: string
+		isHidden
+		isKey
+		summarizeBy: none
+		sourceColumn: target_key
+
+	column 'Target ID'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: target_id
+
+	column category_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: category_id
+
+	column priority
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: priority
+
+	column 'Target Days'
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: target_days
+
+	column 'Target Met Rate'
+		dataType: double
+		formatString: 0.0%
+		summarizeBy: none
+		sourceColumn: target_met_rate
+
+	column 'Effective From'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		summarizeBy: none
+		sourceColumn: effective_from
+
+	column 'Effective To'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		summarizeBy: none
+		sourceColumn: effective_to
+
+	column 'Target Owner Role'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: target_owner_role
+
+	column Notes
+		dataType: string
+		summarizeBy: none
+		sourceColumn: notes
+
+	partition Target = m
+		mode: import
+		source = TargetSource
+
+	annotation PBI_ResultType = Table

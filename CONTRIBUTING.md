@@ -1,23 +1,9 @@
 # Contributing
 
-This repository is primarily a portfolio artifact, but contributions and review
-comments are welcome if they improve clarity, correctness, or reproducibility.
+Changes are welcome when they improve the model, report, evidence or operating clarity without weakening the public data boundary.
 
-## Before opening a pull request
+Before opening a pull request, run `make install` once and `make qa` for the change. Keep the sample synthetic. Update the model contract, KPI dictionary and expected results when their meaning changes.
 
-1. Keep all data synthetic and non-client.
-2. Do not add PBIX, PBIP, screenshots, or report exports unless they were
-   created from a real validated Power BI Desktop build.
-3. Run:
+A result changing pull request should explain the business reason, old result, new result and restatement decision. A relationship change should explain filter direction. An access change should include allowed, multi area and unmapped identity tests.
 
-   ```bash
-   make test
-   ```
-
-4. Update README or docs when model scope, measures, or validation status change.
-5. Explain the business reason for the change, not only the documentation edit.
-
-## Review standard
-
-A change is not ready if it makes the project look more complete than it is.
-Power BI artifacts must be real, refreshed, and checked before they are claimed.
+Do not commit PBIX files, cached model data, local settings, credentials, tenant details or screenshots from private reports. Desktop screenshots from this project belong only after the acceptance test passes and should identify the tested commit.

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "c2d3e4f5061728394051",
+  "position": {
+    "x": 24,
+    "y": 228,
+    "z": 3000,
+    "height": 464,
+    "width": 500,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Service Area"
+                    }
+                  },
+                  "Property": "Service Area"
+                }
+              },
+              "queryRef": "Service Area.Service Area",
+              "nativeQueryRef": "Service Area",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Measures"
+                    }
+                  },
+                  "Property": "Data Readiness Issue Count"
+                }
+              },
+              "queryRef": "Measures.Data Readiness Issue Count",
+              "nativeQueryRef": "Data Readiness Issue Count"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Records with readiness issues by service area'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

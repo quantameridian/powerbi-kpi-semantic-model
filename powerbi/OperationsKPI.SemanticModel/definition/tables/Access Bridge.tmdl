@@ -1,0 +1,29 @@
+/// Synthetic identity to service area mapping used by the sample dynamic security role.
+table 'Access Bridge'
+	isHidden
+
+	column 'User Principal Name'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: user_principal_name
+
+	column service_area_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: service_area_id
+
+	column 'Access Role'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: access_role
+
+	column 'Active Flag'
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: active_flag
+
+	partition 'Access Bridge' = m
+		mode: import
+		source = AccessSource
+
+	annotation PBI_ResultType = Table

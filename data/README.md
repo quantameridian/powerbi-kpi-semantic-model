@@ -1,15 +1,9 @@
-# Data
+# Synthetic Data
 
-This folder contains synthetic, non-client CSV files for the planned Power BI KPI semantic model.
+These files describe a fictional service operation from January through June 2026. Names refer to generic teams and roles; identities use the reserved `example.invalid` domain.
 
-## Files
+The sample includes successful closures, late closures, active overdue work, paused work, missing owners, missing due dates and missing closure evidence. Those imperfections are intentional because the model is expected to show reporting risk rather than silently clean it away.
 
-| File | Purpose | Grain |
-| --- | --- | --- |
-| `sample-operational-data.csv` | Operational work-item sample data for fact modelling | One row per operational item |
-| `sample-targets.csv` | Target thresholds for category and priority combinations | One row per target key |
-| `sample-reference-data.csv` | Compact reference data for service areas, owners, categories, statuses, and priorities | One row per reference value |
+File contracts and row counts are held in `contracts/model-contract.json`. `make qa` checks headers, keys, references, target matches and access mappings before it validates the Power BI source.
 
-## Safety note
-
-The data is fictional and role-based. It does not represent a real organisation, client, employer, official dataset, or workplace system.
+Do not replace these files with client, employee or operational data. Use a private governed source for any real implementation.

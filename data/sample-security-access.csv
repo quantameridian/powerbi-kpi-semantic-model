@@ -1,0 +1,7 @@
+user_principal_name,service_area_id,access_role,active_flag
+manager.sa01@example.invalid,SA01,Service Area Manager,true
+manager.sa02@example.invalid,SA02,Service Area Manager,true
+manager.sa03@example.invalid,SA03,Service Area Manager,true
+manager.sa04@example.invalid,SA04,Service Area Manager,true
+manager.multi@example.invalid,SA01,Service Area Manager,true
+manager.multi@example.invalid,SA03,Service Area Manager,true

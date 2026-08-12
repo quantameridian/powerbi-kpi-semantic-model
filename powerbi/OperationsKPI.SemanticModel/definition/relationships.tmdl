@@ -1,0 +1,43 @@
+relationship 0c42d20e-f5a4-49e7-9bed-a64dfab90101
+	fromColumn: 'Operational Item'.service_area_id
+	toColumn: 'Service Area'.service_area_id
+
+relationship c38ccddb-6000-4111-aa94-309452c769df
+	fromColumn: 'Operational Item'.owner_id
+	toColumn: Owner.owner_id
+
+relationship 54779236-97cf-40f1-9a35-3c43aef18092
+	fromColumn: 'Operational Item'.category_id
+	toColumn: Category.category_id
+
+relationship 07ecbad8-90e4-4a52-96b2-8547b123ad29
+	fromColumn: 'Operational Item'.status
+	toColumn: Status.status
+
+relationship e02c9b4f-a8a8-47a5-8265-4e54a8226507
+	fromColumn: 'Operational Item'.priority
+	toColumn: Priority.priority
+
+relationship 61672878-aac6-463c-86f9-94ba65b07369
+	fromColumn: 'Operational Item'.target_key
+	toColumn: Target.target_key
+
+relationship 58437d38-84cf-4a06-85c6-df1c1af73bbb
+	fromColumn: 'Operational Item'.'Opened Date'
+	toColumn: Date.Date
+
+relationship 0240ab98-8ea2-45bd-91cf-568da8dd6072
+	isActive: false
+	fromColumn: 'Operational Item'.'Due Date'
+	toColumn: Date.Date
+
+relationship c8e48549-0d2f-43d8-9f92-f40fd573704e
+	isActive: false
+	fromColumn: 'Operational Item'.'Closed Date'
+	toColumn: Date.Date
+
+relationship 3a950339-4978-4163-aaad-a524a992c009
+	crossFilteringBehavior: bothDirections
+	securityFilteringBehavior: bothDirections
+	fromColumn: 'Access Bridge'.service_area_id
+	toColumn: 'Service Area'.service_area_id
