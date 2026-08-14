@@ -4,9 +4,9 @@
     "net8.0": {
       "Microsoft.AnalysisServices": {
         "type": "Direct",
-        "requested": "[19.114.8, )",
-        "resolved": "19.114.8",
-        "contentHash": "6V61ctP+/OHGCslG0nUGyoKmh3w79cHDAstD7pWTFKWaKs7787De16oIebHMnFDaJHRFyZD3FS+5hjhvotBxug==",
+        "requested": "[19.114.12, )",
+        "resolved": "19.114.12",
+        "contentHash": "8FxwEC7g+y8SJrSdtQGcXHtjmyp/z9GWeMDO9HOY2R/juDFk/zPHP3R00bz5RMeStuIbpAJY/DfI8YsTfiJ56w==",
         "dependencies": {
           "Microsoft.Identity.Client": "4.83.3",
           "Microsoft.Identity.Client.Broker": "4.83.3"
