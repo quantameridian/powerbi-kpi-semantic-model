@@ -4,6 +4,6 @@
   "private": true,
   "description": "Pinned PBIR validation tooling for the Operations KPI Power BI project.",
   "devDependencies": {
-    "@microsoft/powerbi-report-authoring-cli": "0.1.4"
+    "@microsoft/powerbi-report-authoring-cli": "0.4.0"
   }
 }
